@@ -1,0 +1,54 @@
+<view class="container">
+  <!-- 个人信息区 -->
+  <view class="personal-info">
+    <view class="section-title">个人信息</view>
+    <view class="info-content">
+      <image class="user-avatar" src="{{user.avatar}}" mode="aspectFill"></image>
+      <view class="user-details">
+        <text class="user-name">昵称: {{user.name}}</text>
+        <text class="user-message">留言: {{user.message}}</text>
+        <van-button bindtap="onEditProfile" type="primary" size="small">编辑资料</van-button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 个人余额区 -->
+  <view class="balance-area">
+    <view class="section-title">个人余额</view>
+    <view class="balance-content">
+      <text class="balance-amount">可自由支配余额: {{user.balance}} 元</text>
+      <van-button bindtap="onBalanceHistory" type="info" block>余额变动记录</van-button>
+    </view>
+  </view>
+
+  <!-- 奖励申请区 -->
+  <view class="reward-area">
+    <view class="section-title">奖励申请</view>
+    <view class="reward-content">
+      <van-button bindtap="onSubmitReward" type="primary" block>提交奖励申请</van-button>
+      <view wx:if="{{currentUser.role === 'admin'}}">
+        <van-button bindtap="onRewardApproval" type="warning" block>奖励审批</van-button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 设置区 -->
+  <view class="settings-area">
+    <view class="section-title">设置</view>
+    <view class="settings-content">
+      <van-button bindtap="onEditName" type="default" block>修改昵称</van-button>
+      <van-button bindtap="onEditAvatar" type="default" block>修改头像</van-button>
+      <van-button bindtap="onNotificationSettings" type="default" block>通知设置</van-button>
+      <van-button bindtap="onSystemSettings" type="default" block>系统设置</van-button>
+    </view>
+  </view>
+
+  <!-- 登录/退出区 -->
+  <view class="login-area">
+    <view class="section-title">登录 / 退出</view>
+    <view class="login-content">
+      <van-button bindtap="onWechatLogin" type="primary" block>微信登录</van-button>
+      <van-button bindtap="onLogout" type="danger" block>退出登录</van-button>
+    </view>
+  </view>
+</view>

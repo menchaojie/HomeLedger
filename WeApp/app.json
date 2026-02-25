@@ -1,0 +1,62 @@
+{
+  "pages": [
+    "pages/family/index",
+    "pages/transaction/index",
+    "pages/profile/index",
+    "pages/test/index"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "HomeLedger",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationStyle": "default",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": true,
+    "backgroundColor": "#f5f5f5",
+    "onReachBottomDistance": 50
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "debug": true,
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#4CAF50",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/family/index",
+        "text": "家庭",
+        "iconPath": "assets/home.png",
+        "selectedIconPath": "assets/home-active.png"
+      },
+      {
+        "pagePath": "pages/transaction/index",
+        "text": "交易",
+        "iconPath": "assets/swap.png",
+        "selectedIconPath": "assets/swap-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "个人",
+        "iconPath": "assets/user.png",
+        "selectedIconPath": "assets/user-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "packNpmManually": true,
+  "packNpmRelationList": [
+    {
+      "packageJsonPath": "./package.json",
+      "miniprogramNpmDistDir": "./miniprogram/"
+    }
+  ],
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index",
+    "van-notice-bar": "@vant/weapp/notice-bar/index"
+  }
+}

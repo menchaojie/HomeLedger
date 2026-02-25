@@ -1,0 +1,42 @@
+<view class="container">
+  <!-- 家庭信息区 -->
+  <view class="family-info">
+    <view class="family-header">
+      <image class="family-avatar" src="{{family.avatar}}" mode="aspectFill"></image>
+      <view class="family-details">
+        <text class="family-name">{{family.name}}</text>
+        <text class="family-id">ID: {{family.id}}</text>
+        <text class="family-meta">成员数: {{family.memberCount}}  创建时间: {{family.createdAt}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成员列表 -->
+  <view class="member-list">
+    <view class="section-title">家庭成员 自由支配资金 余额</view>
+    <view class="members">
+      <view wx:for="{{members}}" wx:key="id" class="member-item" bindtap="onMemberClick" data-index="{{index}}">
+        <image class="member-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+        <view class="member-info">
+          <text class="member-name">{{item.name}}</text>
+          <text class="member-role">{{item.role === 'admin' ? '管理员' : '普通成员'}}</text>
+        </view>
+        <text class="member-balance">余额: {{item.balance}} 元</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作区 -->
+  <view class="action-area">
+    <view class="section-title">操作</view>
+    <view class="actions">
+      <van-button bindtap="onCreateFamily" type="primary" block>创建家庭</van-button>
+      <van-button bindtap="onJoinFamily" type="info" block>加入家庭</van-button>
+      <view wx:if="{{currentUser.role === 'admin'}}" class="admin-actions">
+        <van-button bindtap="onSetMonthlyLimit" type="warning" block>设置每月额度</van-button>
+        <van-button bindtap="onMemberApproval" type="warning" block>成员审批</van-button>
+        <van-button bindtap="onRewardApproval" type="warning" block>奖励审批</van-button>
+      </view>
+    </view>
+  </view>
+</view>

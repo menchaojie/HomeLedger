@@ -1,0 +1,55 @@
+<view class="container">
+  <!-- 服务区 -->
+  <view class="service-area">
+    <view class="section-title">服务区</view>
+    <view class="services">
+      <view wx:for="{{services}}" wx:key="id" class="service-item">
+        <view class="service-info">
+          <text class="service-name">{{item.name}}</text>
+          <text class="service-provider">提供者: {{item.provider}}</text>
+        </view>
+        <view class="service-price">价格: {{item.price}} 元</view>
+        <van-button bindtap="onPurchaseService" data-index="{{index}}" type="primary" size="small">购买</van-button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 悬赏任务区 -->
+  <view class="bounty-area">
+    <view class="section-title">悬赏任务</view>
+    <view class="bounty-tasks">
+      <view wx:for="{{bountyTasks}}" wx:key="id" class="bounty-item">
+        <view class="bounty-info">
+          <text class="bounty-name">{{item.name}}</text>
+          <text class="bounty-requester">发布人: {{item.requester}}</text>
+        </view>
+        <view class="bounty-reward">奖励: {{item.reward}} 元</view>
+        <view class="bounty-status">{{item.status === 'in_progress' ? '进行中' : '待完成'}}</view>
+      </view>
+      <van-button bindtap="onPostBounty" type="info" block>发布悬赏</van-button>
+    </view>
+  </view>
+
+  <!-- 交易记录区 -->
+  <view class="transaction-area">
+    <view class="section-title">交易记录</view>
+    <view class="filter-bar">
+      <van-button bindtap="onFilterTransactions" type="default" plain size="small">筛选: 日期 ▼</van-button>
+      <van-button bindtap="onFilterTransactions" type="default" plain size="small">类型 ▼</van-button>
+      <van-button bindtap="onFilterTransactions" type="default" plain size="small">成员 ▼</van-button>
+    </view>
+    <view class="transactions">
+      <view wx:for="{{transactions}}" wx:key="id" class="transaction-item" bindtap="onTransactionDetail" data-index="{{index}}">
+        <view class="transaction-date">{{item.date}}</view>
+        <view class="transaction-details">
+          <text class="transaction-sender">{{item.sender}}</text>
+          <text class="transaction-arrow">→</text>
+          <text class="transaction-receiver">{{item.receiver}}</text>
+          <text class="transaction-type">{{item.type}}</text>
+          <text class="transaction-amount">{{item.amount > 0 ? '+' : ''}}{{item.amount}} 元</text>
+        </view>
+        <view class="transaction-status">{{item.status === 'completed' ? '已完成' : '进行中'}}</view>
+      </view>
+    </view>
+  </view>
+</view>

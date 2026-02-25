@@ -1,0 +1,11 @@
+<!--pages/index/index.wxml-->
+<text>真实的</text>
+<view>好样的</view>
+<view>好样的</view>
+<view>好样的</view>
+<view>好样的</view>
+<view>好样的</view>
+<view>好样的</view>
+<view>好样的</view>
+<van-button type="primary">ok</van-button>
+<van-notice-bar left-icon="volume-o" text="在代码阅读过程中人们说脏话的频率是衡量代码质量的唯一标准。" />
