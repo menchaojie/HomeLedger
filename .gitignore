@@ -3,5 +3,47 @@ WeApp/node_modules
 WeApp/miniprogram_npm
 WeApp/project.private.config.json
 
+## 忽略 Python 缓存文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
+## 忽略虚拟环境
+venv/
+env/
+ENV/
+.venv/
 
+## 忽略 IDE 文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# git reset --hard baf7b2c## 忽略日志文件
+*.log
+
+## 忽略环境变量文件
+# .env
+.env.local
+
+## 忽略缓存文件
+# WeApp/cache.json
