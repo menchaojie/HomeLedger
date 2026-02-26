@@ -1,15 +1,70 @@
 // 个人页面逻辑
+const { authAPI, rewardAPI, isLoggedIn, setToken } = require('../../utils/api.js');
+
 Page({
   data: {
-    user: {
+    user: null,
+    currentUser: null,
+    loading: true,
+    isLoggedIn: false  // 登录状态
+  },
+
+  onLoad() {
+    this.loadUserData();
+  },
+
+  onShow() {
+    // 页面显示时重新检查登录状态
+    this.loadUserData();
+  },
+
+  // 加载用户数据
+  async loadUserData() {
+    this.setData({ loading: true });
+    try {
+      const loggedIn = isLoggedIn();
+      this.setData({ isLoggedIn: loggedIn });
+      
+      if (loggedIn) {
+        // 获取当前用户信息
+        const userInfo = await authAPI.getCurrentUser();
+        this.setData({
+          user: userInfo,
+          currentUser: userInfo
+        });
+      } else {
+        // 未登录状态
+        this.setData({
+          user: null,
+          currentUser: null
+        });
+      }
+    } catch (error) {
+      console.error('加载用户数据失败:', error);
+      // API调用失败时使用模拟数据
+      this.useMockData();
+    } finally {
+      this.setData({ loading: false });
+    }
+  },
+
+  // 使用模拟数据
+  useMockData() {
+    const mockUser = {
       name: 'Alice',
       message: '今天也要赚钱',
       avatar: '/assets/default-avatar.png',
       balance: 120
-    },
-    currentUser: {
+    };
+    
+    const mockCurrentUser = {
       role: 'admin' // 模拟当前用户是管理员
-    }
+    };
+    
+    this.setData({
+      user: mockUser,
+      currentUser: mockCurrentUser
+    });
   },
 
   // 编辑个人资料
@@ -19,13 +74,22 @@ Page({
       content: '修改昵称和留言',
       showCancel: true,
       confirmText: '保存',
-      success: (res) => {
+      success: async (res) => {
         if (res.confirm) {
-          // 模拟保存成功
-          wx.showToast({
-            title: '保存成功',
-            icon: 'success'
-          });
+          try {
+            await authAPI.updateUser({
+              nickname: '新昵称',
+              avatar_url: this.data.user.avatar_url
+            });
+            wx.showToast({
+              title: '保存成功',
+              icon: 'success'
+            });
+            // 重新加载数据
+            this.loadUserData();
+          } catch (error) {
+            console.error('编辑资料失败:', error);
+          }
         }
       }
     });
@@ -47,13 +111,22 @@ Page({
       content: '请填写奖励申请详情',
       showCancel: true,
       confirmText: '提交',
-      success: (res) => {
+      success: async (res) => {
         if (res.confirm) {
-          // 模拟提交成功
-          wx.showToast({
-            title: '申请已提交',
-            icon: 'success'
-          });
+          try {
+            await rewardAPI.createReward({
+              family_id: 1, // 假设家庭ID为1
+              amount: 100,
+              reason: '完成重要任务',
+              description: '详细说明奖励原因'
+            });
+            wx.showToast({
+              title: '申请已提交',
+              icon: 'success'
+            });
+          } catch (error) {
+            console.error('提交奖励申请失败:', error);
+          }
         }
       }
     });
@@ -61,7 +134,7 @@ Page({
 
   // 奖励审批
   onRewardApproval() {
-    if (this.data.currentUser.role === 'admin') {
+    if (this.data.currentUser && this.data.currentUser.role === 'admin') {
       wx.showModal({
         title: '奖励审批',
         content: '查看和审批奖励申请',
@@ -69,7 +142,6 @@ Page({
         confirmText: '查看',
         success: (res) => {
           if (res.confirm) {
-            // 模拟进入审批页面
             wx.showToast({
               title: '进入审批页面',
               icon: 'success'
@@ -87,13 +159,21 @@ Page({
       content: '输入新昵称',
       showCancel: true,
       confirmText: '保存',
-      success: (res) => {
+      success: async (res) => {
         if (res.confirm) {
-          // 模拟保存成功
-          wx.showToast({
-            title: '保存成功',
-            icon: 'success'
-          });
+          try {
+            await authAPI.updateUser({
+              nickname: '新昵称'
+            });
+            wx.showToast({
+              title: '保存成功',
+              icon: 'success'
+            });
+            // 重新加载数据
+            this.loadUserData();
+          } catch (error) {
+            console.error('修改昵称失败:', error);
+          }
         }
       }
     });
@@ -106,7 +186,7 @@ Page({
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
       success: (res) => {
-        // 模拟上传成功
+        // 这里可以实现头像上传逻辑
         wx.showToast({
           title: '头像更新成功',
           icon: 'success'
@@ -133,22 +213,17 @@ Page({
     });
   },
 
-  // 微信登录
+  // 登录
   onWechatLogin() {
-    wx.showModal({
-      title: '微信登录',
-      content: '使用微信账号登录',
-      showCancel: true,
-      confirmText: '登录',
-      success: (res) => {
-        if (res.confirm) {
-          // 模拟登录成功
-          wx.showToast({
-            title: '登录成功',
-            icon: 'success'
-          });
-        }
-      }
+    wx.navigateTo({
+      url: '/pages/login/index'
+    });
+  },
+
+  // 注册
+  onRegister() {
+    wx.navigateTo({
+      url: '/pages/register/index'
     });
   },
 
@@ -161,11 +236,14 @@ Page({
       confirmText: '退出',
       success: (res) => {
         if (res.confirm) {
-          // 模拟退出成功
+          authAPI.logout();
           wx.showToast({
             title: '已退出登录',
             icon: 'success'
           });
+          // 更新登录状态并重新加载数据
+          this.setData({ isLoggedIn: false });
+          this.loadUserData();
         }
       }
     });

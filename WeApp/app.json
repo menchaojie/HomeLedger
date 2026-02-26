@@ -1,9 +1,11 @@
 {
   "pages": [
+    "pages/profile/index",
     "pages/family/index",
     "pages/transaction/index",
-    "pages/profile/index",
-    "pages/test/index"
+    "pages/test/index",
+    "pages/register/index",
+    "pages/login/index"
   ],
   "window": {
     "navigationBarTextStyle": "white",
@@ -27,6 +29,12 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
+        "pagePath": "pages/profile/index",
+        "text": "个人",
+        "iconPath": "assets/user.png",
+        "selectedIconPath": "assets/user-active.png"
+      },
+      {
         "pagePath": "pages/family/index",
         "text": "家庭",
         "iconPath": "assets/home.png",
@@ -37,12 +45,6 @@
         "text": "交易",
         "iconPath": "assets/swap.png",
         "selectedIconPath": "assets/swap-active.png"
-      },
-      {
-        "pagePath": "pages/profile/index",
-        "text": "个人",
-        "iconPath": "assets/user.png",
-        "selectedIconPath": "assets/user-active.png"
       }
     ]
   },

@@ -1,0 +1,108 @@
+<!-- 注册页面 -->
+<view class="register-container">
+  <!-- 头部 -->
+  <view class="register-header">
+    <image class="logo" src="/assets/logo.png" mode="aspectFit"></image>
+    <text class="title">注册 HomeLedger</text>
+    <text class="subtitle">创建您的家庭账本账户</text>
+  </view>
+
+  <!-- 注册表单 -->
+  <view class="register-form">
+    <!-- 用户名 -->
+    <view class="form-group">
+      <text class="label">用户名</text>
+      <input 
+        class="input" 
+        type="text" 
+        placeholder="请输入用户名（必填）" 
+        value="{{username}}"
+        bindinput="onUsernameInput"
+      />
+    </view>
+
+    <!-- 密码 -->
+    <view class="form-group">
+      <text class="label">密码</text>
+      <input 
+        class="input" 
+        type="password" 
+        password 
+        placeholder="请输入密码（必填）" 
+        value="{{password}}"
+        bindinput="onPasswordInput"
+      />
+    </view>
+
+    <!-- 确认密码 -->
+    <view class="form-group">
+      <text class="label">确认密码</text>
+      <input 
+        class="input" 
+        type="password" 
+        password 
+        placeholder="请再次输入密码" 
+        value="{{confirmPassword}}"
+        bindinput="onConfirmPasswordInput"
+      />
+    </view>
+
+    <!-- 手机号 -->
+    <view class="form-group">
+      <text class="label">手机号</text>
+      <input 
+        class="input" 
+        type="number" 
+        placeholder="请输入手机号（选填）" 
+        value="{{phone}}"
+        bindinput="onPhoneInput"
+      />
+    </view>
+
+    <!-- 邮箱 -->
+    <view class="form-group">
+      <text class="label">邮箱</text>
+      <input 
+        class="input" 
+        type="text" 
+        placeholder="请输入邮箱（选填）" 
+        value="{{email}}"
+        bindinput="onEmailInput"
+      />
+    </view>
+
+    <!-- 家庭角色 -->
+    <view class="form-group">
+      <text class="label">家庭角色</text>
+      <picker 
+        class="picker" 
+        range="{{roleOptions}}" 
+        value="{{roleIndex}}"
+        bindchange="onRoleChange"
+      >
+        <view class="picker-value">
+          {{roleOptions[roleIndex] || '请选择家庭角色'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 注册按钮 -->
+    <view class="form-actions">
+      <van-button 
+        type="primary" 
+        size="large" 
+        block
+        loading="{{loading}}"
+        bindtap="onRegister"
+      >
+        注册
+      </van-button>
+    </view>
+
+    <!-- 已有账户 -->
+    <view class="login-link">
+      <text>已有账户？</text>
+      <text class="link" bindtap="onGoToLogin">立即登录</text>
+    </view>
+  </view>
+</view>
