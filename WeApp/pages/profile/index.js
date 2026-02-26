@@ -241,6 +241,13 @@ Page({
             title: '已退出登录',
             icon: 'success'
           });
+          
+          // 通知全局应用更新tabBar状态
+          const app = getApp();
+          if (app && app.onLoginStatusChange) {
+            app.onLoginStatusChange();
+          }
+          
           // 更新登录状态并重新加载数据
           this.setData({ isLoggedIn: false });
           this.loadUserData();

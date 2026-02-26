@@ -149,19 +149,26 @@ Page({
       
       // 跳转到个人页面（登录后的状态）
       setTimeout(() => {
-        // 先关闭当前页面，再跳转到个人页面
-        wx.navigateBack({
-          delta: 1
-        });
+        // 通知全局应用更新tabBar状态
+        const app = getApp();
+        if (app && app.onLoginStatusChange) {
+          app.onLoginStatusChange();
+        }
         
-        // 延迟刷新个人页面数据
-        setTimeout(() => {
-          const pages = getCurrentPages();
-          const profilePage = pages.find(page => page.route === 'pages/profile/index');
-          if (profilePage && profilePage.loadUserData) {
-            profilePage.loadUserData();
+        // 使用switchTab确保tabBar显示
+        wx.switchTab({
+          url: '/pages/profile/index',
+          success: () => {
+            // tabBar显示后，刷新页面数据
+            setTimeout(() => {
+              const pages = getCurrentPages();
+              const profilePage = pages.find(page => page.route === 'pages/profile/index');
+              if (profilePage && profilePage.loadUserData) {
+                profilePage.loadUserData();
+              }
+            }, 300);
           }
-        }, 500);
+        });
       }, 1500);
 
     } catch (error) {
