@@ -6,11 +6,15 @@
       <view class="login-title">欢迎使用 HomeLedger</view>
       <view class="login-subtitle">请先登录以使用完整功能</view>
     </view>
-    
+
     <view class="login-options">
-      <van-button bindtap="onWechatLogin"  plain hairline type="primary" size="large" block>登录账户</van-button>
+      <van-button bindtap="onWechatLogin" plain hairline type="primary" size="large" block>登录账户</van-button>
       <van-button bindtap="onRegister" plain hairline type="primary" size="large" block>注册新账户</van-button>
     </view>
+    <van-notice-bar left-icon="volume-o" 
+    text="一人自律，养成好习惯；一家自律，形成好家风；一国自律，塑造好文化。" 
+    />
+
   </view>
 
   <!-- 已登录状态 -->
@@ -23,7 +27,7 @@
         <view class="user-details">
           <text class="user-name">昵称: {{user.name}}</text>
           <text class="user-message">留言: {{user.message}}</text>
-          <van-button bindtap="onEditProfile" type="primary" size="small">编辑资料</van-button>
+          <!-- <van-button bindtap="onEditProfile" plain type="primary" size="small">编辑资料</van-button> -->
         </view>
       </view>
     </view>
@@ -33,7 +37,7 @@
       <view class="section-title">个人余额</view>
       <view class="balance-content">
         <text class="balance-amount">可自由支配余额: {{user.balance}} 元</text>
-        <van-button bindtap="onBalanceHistory" type="info" block>余额变动记录</van-button>
+        <van-button bindtap="onBalanceHistory" plain type="primary" block>余额变动记录</van-button>
       </view>
     </view>
 
@@ -41,7 +45,7 @@
     <view class="reward-area">
       <view class="section-title">奖励申请</view>
       <view class="reward-content">
-        <van-button bindtap="onSubmitReward" type="primary" block>提交奖励申请</van-button>
+        <van-button bindtap="onSubmitReward" plain type="primary" block>提交奖励申请</van-button>
         <view wx:if="{{currentUser.role === 'admin'}}">
           <van-button bindtap="onRewardApproval" type="warning" block>奖励审批</van-button>
         </view>
@@ -51,17 +55,96 @@
     <!-- 设置区 -->
     <view class="settings-area">
       <view class="section-title">设置</view>
-      <view class="settings-content">
-        <van-button bindtap="onEditName" type="default" block>修改昵称</van-button>
-        <van-button bindtap="onEditAvatar" type="default" block>修改头像</van-button>
-        <van-button bindtap="onNotificationSettings" type="default" block>通知设置</van-button>
-        <van-button bindtap="onSystemSettings" type="default" block>系统设置</van-button>
+      <view class="settings-list">
+        <!-- 个人信息设置 -->
+        <view class="settings-group">
+          <view class="group-header" bindtap="toggleGroup" data-group="personal">
+            <view class="group-title">个人信息</view>
+            <van-icon name="{{groupStates.personal ? 'arrow-down' : 'arrow'}}" class="group-arrow" />
+          </view>
+          <view class="group-content" wx:if="{{groupStates.personal}}">
+            <view class="settings-item" bindtap="onEditName">
+              <view class="item-left">
+                <van-icon name="user-o" class="item-icon" />
+                <text class="item-text">修改昵称</text>
+              </view>
+              <view class="item-right">
+                <text class="item-value">{{user.name || '未设置'}}</text>
+                <van-icon name="arrow" class="item-arrow" />
+              </view>
+            </view>
+            
+            <view class="settings-item" bindtap="onEditAvatar">
+              <view class="item-left">
+                <van-icon name="photo-o" class="item-icon" />
+                <text class="item-text">修改头像</text>
+              </view>
+              <view class="item-right">
+                <van-icon name="arrow" class="item-arrow" />
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 应用设置 -->
+        <view class="settings-group">
+          <view class="group-header" bindtap="toggleGroup" data-group="app">
+            <view class="group-title">应用设置</view>
+            <van-icon name="{{groupStates.app ? 'arrow-down' : 'arrow'}}" class="group-arrow" />
+          </view>
+          <view class="group-content" wx:if="{{groupStates.app}}">
+            <view class="settings-item" bindtap="onNotificationSettings">
+              <view class="item-left">
+                <van-icon name="bell-o" class="item-icon" />
+                <text class="item-text">通知设置</text>
+              </view>
+              <view class="item-right">
+                <text class="item-value">开启</text>
+                <van-icon name="arrow" class="item-arrow" />
+              </view>
+            </view>
+            
+            <view class="settings-item" bindtap="onSystemSettings">
+              <view class="item-left">
+                <van-icon name="setting-o" class="item-icon" />
+                <text class="item-text">系统设置</text>
+              </view>
+              <view class="item-right">
+                <van-icon name="arrow" class="item-arrow" />
+              </view>
+            </view>
+            
+            <view class="settings-item" bindtap="onAboutApp">
+              <view class="item-left">
+                <van-icon name="info-o" class="item-icon" />
+                <text class="item-text">关于应用</text>
+              </view>
+              <view class="item-right">
+                <van-icon name="arrow" class="item-arrow" />
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 账户操作 -->
+        <view class="settings-group">
+          <view class="group-header" bindtap="toggleGroup" data-group="account">
+            <view class="group-title">账户操作</view>
+            <van-icon name="{{groupStates.account ? 'arrow-down' : 'arrow'}}" class="group-arrow" />
+          </view>
+          <view class="group-content" wx:if="{{groupStates.account}}">
+            <view class="settings-item logout-item" bindtap="onLogout">
+              <view class="item-left">
+                <van-icon name="close" class="item-icon logout-icon" />
+                <text class="item-text logout-text">退出登录</text>
+              </view>
+              <view class="item-right">
+                <van-icon name="arrow" class="item-arrow" />
+              </view>
+            </view>
+          </view>
+        </view>
       </view>
-    </view>
-
-    <!-- 退出登录 -->
-    <view class="logout-area">
-      <van-button bindtap="onLogout" type="danger" size="large" block>退出登录</van-button>
     </view>
   </view>
 </view>

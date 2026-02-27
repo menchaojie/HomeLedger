@@ -3,6 +3,9 @@ WeApp/node_modules
 WeApp/miniprogram_npm
 WeApp/project.private.config.json
 
+# 后端项目
+Backend/.server.pid
+
 ## 忽略 Python 缓存文件
 __pycache__/
 *.py[cod]

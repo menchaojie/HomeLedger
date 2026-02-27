@@ -6,7 +6,12 @@ Page({
     user: null,
     currentUser: null,
     loading: true,
-    isLoggedIn: false  // 登录状态
+    isLoggedIn: false,  // 登录状态
+    groupStates: {
+      personal: true,    // 个人信息分组默认展开
+      app: false,        // 应用设置分组默认收起
+      account: false     // 账户操作分组默认收起
+    }
   },
 
   onLoad() {
@@ -28,9 +33,12 @@ Page({
       if (loggedIn) {
         // 获取当前用户信息
         const userInfo = await authAPI.getCurrentUser();
+        // 处理头像数据
+        const processedUser = this.processUserAvatar(userInfo);
+        
         this.setData({
-          user: userInfo,
-          currentUser: userInfo
+          user: processedUser,
+          currentUser: processedUser
         });
       } else {
         // 未登录状态
@@ -48,12 +56,27 @@ Page({
     }
   },
 
+  // 处理用户头像，如果没有头像则使用默认头像
+  processUserAvatar(userData) {
+    if (!userData) return null;
+    
+    // 复制用户数据，避免修改原始数据
+    const processedUser = { ...userData };
+    
+    // 如果头像为空或无效，使用默认头像
+    if (!processedUser.avatar || processedUser.avatar === '' || processedUser.avatar === 'null') {
+      processedUser.avatar = '/assets/default-avatar.png';
+    }
+    
+    return processedUser;
+  },
+
   // 使用模拟数据
   useMockData() {
     const mockUser = {
       name: 'Alice',
       message: '今天也要赚钱',
-      avatar: '/assets/default-avatar.png',
+      avatar: '', // 模拟空头像，将使用默认头像
       balance: 120
     };
     
@@ -61,9 +84,23 @@ Page({
       role: 'admin' // 模拟当前用户是管理员
     };
     
+    // 处理头像数据
+    const processedUser = this.processUserAvatar(mockUser);
+    
     this.setData({
-      user: mockUser,
+      user: processedUser,
       currentUser: mockCurrentUser
+    });
+  },
+
+  // 切换分组展开/收起状态
+  toggleGroup(e) {
+    const group = e.currentTarget.dataset.group;
+    const currentState = this.data.groupStates[group];
+    
+    // 切换当前分组的状态
+    this.setData({
+      [`groupStates.${group}`]: !currentState
     });
   },
 

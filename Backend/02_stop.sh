@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # HomeLedger 后端服务停止脚本
-# 停止通过 backend_start.sh 启动的 FastAPI 服务
+# 停止通过 01_start.sh 启动的 FastAPI 服务
 
 echo "🛑 正在停止 HomeLedger 后端服务..."
 
@@ -78,5 +78,5 @@ if lsof -ti:$PORT >/dev/null 2>&1; then
     echo "尝试使用: lsof -ti:$PORT"
 else
     echo "🎉 后端服务已完全停止"
-    echo "💡 提示: 可以重新启动服务: ./backend_start.sh"
+    echo "💡 提示: 可以重新启动服务: ./01_start.sh"
 fi
