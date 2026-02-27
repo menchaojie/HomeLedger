@@ -40,7 +40,7 @@
 .user-name {
   font-size: 28rpx;
   font-weight: bold;
-  color: #333333;
+  color: #0fc74f;
   margin-bottom: 8rpx;
   display: block;
 }
@@ -49,6 +49,14 @@
   font-size: 24rpx;
   color: #666666;
   margin-bottom: 12rpx;
+  display: block;
+}
+
+.user-info {
+  font-size: 22rpx;
+  font-weight: bold;
+  color: #666666;
+  margin-bottom: 8rpx;
   display: block;
 }
 

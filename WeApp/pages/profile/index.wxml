@@ -25,9 +25,13 @@
       <view class="info-content">
         <image class="user-avatar" src="{{user.avatar}}" mode="aspectFill"></image>
         <view class="user-details">
-          <text class="user-name">昵称: {{user.name}}</text>
+          <text class="user-name">用户名: {{user.user_name || '未设置'}}</text>
+          <text class="user-info">昵称: {{user.nickname}}</text>
           <text class="user-message">留言: {{user.message}}</text>
-          <!-- <van-button bindtap="onEditProfile" plain type="primary" size="small">编辑资料</van-button> -->
+          <text class="user-info">角色: {{user.role || '未设置'}}</text>
+          <text class="user-info">手机: {{user.phone || '未设置'}}</text>
+          <text class="user-info">邮箱: {{user.email || '未设置'}}</text>
+          <van-button bindtap="onEditProfile" plain type="primary" size="small" style="margin-top: 10rpx;">编辑资料</van-button>
         </view>
       </view>
     </view>
@@ -57,7 +61,7 @@
       <view class="section-title">设置</view>
       <view class="settings-list">
         <!-- 个人信息设置 -->
-        <view class="settings-group">
+        <!-- <view class="settings-group">
           <view class="group-header" bindtap="toggleGroup" data-group="personal">
             <view class="group-title">个人信息</view>
             <van-icon name="{{groupStates.personal ? 'arrow-down' : 'arrow'}}" class="group-arrow" />
@@ -84,7 +88,7 @@
               </view>
             </view>
           </view>
-        </view>
+        </view> -->
         
         <!-- 应用设置 -->
         <view class="settings-group">
@@ -115,14 +119,24 @@
             </view>
             
             <view class="settings-item" bindtap="onAboutApp">
-              <view class="item-left">
-                <van-icon name="info-o" class="item-icon" />
-                <text class="item-text">关于应用</text>
-              </view>
-              <view class="item-right">
-                <van-icon name="arrow" class="item-arrow" />
-              </view>
+            <view class="item-left">
+              <van-icon name="info-o" class="item-icon" />
+              <text class="item-text">关于应用</text>
             </view>
+            <view class="item-right">
+              <van-icon name="arrow" class="item-arrow" />
+            </view>
+          </view>
+          
+          <view class="settings-item" bindtap="onChangePassword">
+            <view class="item-left">
+              <van-icon name="lock-o" class="item-icon" />
+              <text class="item-text">修改密码</text>
+            </view>
+            <view class="item-right">
+              <van-icon name="arrow" class="item-arrow" />
+            </view>
+          </view>
           </view>
         </view>
         

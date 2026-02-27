@@ -40,6 +40,11 @@ async function request(url, options = {}) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
+  console.log('API 请求 - URL:', `${API_BASE_URL}${url}`);
+  console.log('API 请求 - 方法:', options.method || 'GET');
+  console.log('API 请求 - 数据:', options.data);
+  console.log('API 请求 - 头部:', headers);
+
   try {
     const response = await new Promise((resolve, reject) => {
       wx.request({
@@ -51,6 +56,9 @@ async function request(url, options = {}) {
         fail: reject
       });
     });
+    
+    console.log('API 响应 - 状态码:', response.statusCode);
+    console.log('API 响应 - 数据:', response.data);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return response.data;
@@ -111,6 +119,14 @@ export const authAPI = {
     return request('/auth/me', {
       method: 'PUT',
       data: info
+    });
+  },
+
+  // 修改密码
+  async updatePassword(oldPassword, newPassword) {
+    return request('/auth/me/password', {
+      method: 'PUT',
+      data: { old_password: oldPassword, new_password: newPassword }
     });
   },
 

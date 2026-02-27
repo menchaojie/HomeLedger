@@ -1,0 +1,90 @@
+<view class="container">
+  <view class="header">
+    <view class="header-left" bindtap="onBack">
+      <van-icon name="arrow-left" size="32rpx" />
+    </view>
+    <view class="header-title">编辑资料</view>
+    <view class="header-right" bindtap="onSave">
+      <text class="save-button">保存</text>
+    </view>
+  </view>
+
+  <view class="form-container">
+    <!-- 头像编辑 -->
+    <view class="form-item">
+      <view class="item-label">头像</view>
+      <view class="avatar-upload">
+        <image class="avatar" src="{{formData.avatar}}" mode="aspectFill"></image>
+        <view class="upload-btn" bindtap="onChooseAvatar">
+          <van-icon name="camera" size="32rpx" />
+        </view>
+      </view>
+    </view>
+
+    <!-- 昵称 -->
+    <view class="form-item">
+      <view class="item-label">昵称</view>
+      <van-field
+        value="{{formData.nickname}}"
+        placeholder="请输入昵称"
+        bind:input="onNicknameChange"
+        border="false"
+      />
+    </view>
+
+    <!-- 用户名 -->
+    <view class="form-item">
+      <view class="item-label">用户名</view>
+      <van-field
+        value="{{formData.user_name}}"
+        placeholder="请输入用户名"
+        bind:input="onUserNameChange"
+        border="false"
+      />
+    </view>
+
+    <!-- 留言 -->
+    <view class="form-item">
+      <view class="item-label">留言</view>
+      <van-field
+        value="{{formData.message}}"
+        placeholder="请输入个性签名"
+        bind:input="onMessageChange"
+        border="false"
+      />
+    </view>
+
+    <!-- 手机号 -->
+    <view class="form-item">
+      <view class="item-label">手机号</view>
+      <van-field
+        value="{{formData.phone}}"
+        placeholder="请输入手机号"
+        bind:input="onPhoneChange"
+        border="false"
+      />
+    </view>
+
+    <!-- 邮箱 -->
+    <view class="form-item">
+      <view class="item-label">邮箱</view>
+      <van-field
+        value="{{formData.email}}"
+        placeholder="请输入邮箱"
+        bind:input="onEmailChange"
+        border="false"
+      />
+    </view>
+
+    <!-- 角色 -->
+    <view class="form-item">
+      <view class="item-label">角色</view>
+      <van-field
+        value="{{formData.role}}"
+        placeholder="请输入角色"
+        bind:input="onRoleChange"
+        border="false"
+      />
+    </view>
+  </view>
+</view>

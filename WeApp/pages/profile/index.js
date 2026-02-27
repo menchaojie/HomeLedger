@@ -33,8 +33,8 @@ Page({
       if (loggedIn) {
         // 获取当前用户信息
         const userInfo = await authAPI.getCurrentUser();
-        // 处理头像数据
-        const processedUser = this.processUserAvatar(userInfo);
+        // 处理用户数据
+        const processedUser = this.processUserData(userInfo);
         
         this.setData({
           user: processedUser,
@@ -56,8 +56,8 @@ Page({
     }
   },
 
-  // 处理用户头像，如果没有头像则使用默认头像
-  processUserAvatar(userData) {
+  // 处理用户数据，添加默认值
+  processUserData(userData) {
     if (!userData) return null;
     
     // 复制用户数据，避免修改原始数据
@@ -66,6 +66,16 @@ Page({
     // 如果头像为空或无效，使用默认头像
     if (!processedUser.avatar || processedUser.avatar === '' || processedUser.avatar === 'null') {
       processedUser.avatar = '/assets/default-avatar.png';
+    }
+    
+    // 如果昵称为空或无效，使用默认昵称
+    if (!processedUser.name || processedUser.name === '' || processedUser.name === 'null') {
+      processedUser.name = '未设置昵称';
+    }
+    
+    // 如果留言为空或无效，使用默认留言
+    if (!processedUser.message || processedUser.message === '' || processedUser.message === 'null') {
+      processedUser.message = '今天也要赚钱';
     }
     
     return processedUser;
@@ -84,8 +94,8 @@ Page({
       role: 'admin' // 模拟当前用户是管理员
     };
     
-    // 处理头像数据
-    const processedUser = this.processUserAvatar(mockUser);
+    // 处理用户数据
+    const processedUser = this.processUserData(mockUser);
     
     this.setData({
       user: processedUser,
@@ -106,29 +116,23 @@ Page({
 
   // 编辑个人资料
   onEditProfile() {
-    wx.showModal({
-      title: '编辑资料',
-      content: '修改昵称和留言',
-      showCancel: true,
-      confirmText: '保存',
-      success: async (res) => {
-        if (res.confirm) {
-          try {
-            await authAPI.updateUser({
-              nickname: '新昵称',
-              avatar_url: this.data.user.avatar_url
-            });
-            wx.showToast({
-              title: '保存成功',
-              icon: 'success'
-            });
-            // 重新加载数据
-            this.loadUserData();
-          } catch (error) {
-            console.error('编辑资料失败:', error);
-          }
-        }
+    const user = this.data.user;
+    
+    wx.navigateTo({
+      url: '/pages/edit-profile/index',
+      success: (res) => {
+        // 传递用户数据给编辑页面
+        res.eventChannel.emit('userData', {
+          user: user
+        });
       }
+    });
+  },
+
+  // 修改密码
+  onChangePassword() {
+    wx.navigateTo({
+      url: '/pages/change-password/index'
     });
   },
 
@@ -236,7 +240,7 @@ Page({
   onNotificationSettings() {
     wx.showModal({
       title: '通知设置',
-      content: '设置通知偏好',
+      content: '正在开发中',
       showCancel: false
     });
   },
@@ -245,7 +249,15 @@ Page({
   onSystemSettings() {
     wx.showModal({
       title: '系统设置',
-      content: '系统相关设置',
+      content: '正在开发中',
+      showCancel: false
+    });
+  },
+  // 系统设置
+  onAboutApp() {
+    wx.showModal({
+      title: '关于',
+      content: '正在开发中',
       showCancel: false
     });
   },

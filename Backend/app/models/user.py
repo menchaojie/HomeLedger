@@ -12,8 +12,10 @@ class User(Base):
     __tablename__ = "users"
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    nickname = Column(String, nullable=False)
+    nickname = Column(String, nullable=False)  # 昵称
+    user_name = Column(String, nullable=True)  # 用户名
     avatar_key = Column(String, nullable=True)
+    message = Column(String, nullable=True)  # 个性签名
     # 密码哈希值
     password_hash = Column(String, nullable=True)
     # 用户信息

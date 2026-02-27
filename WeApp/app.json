@@ -5,7 +5,9 @@
     "pages/transaction/index",
     "pages/test/index",
     "pages/register/index",
-    "pages/login/index"
+    "pages/login/index",
+    "pages/change-password/index",
+    "pages/edit-profile/index"
   ],
   "window": {
     "navigationBarTextStyle": "white",

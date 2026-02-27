@@ -1,0 +1,52 @@
+<view class="container">
+  <view class="header">
+    <view class="header-left" bindtap="onBack">
+      <van-icon name="arrow-left" size="32rpx" />
+    </view>
+    <view class="header-title">修改密码</view>
+    <view class="header-right"></view>
+  </view>
+
+  <view class="form-container">
+    <!-- 旧密码 -->
+    <view class="form-item">
+      <view class="item-label">旧密码</view>
+      <van-field
+        value="{{oldPassword}}"
+        placeholder="请输入旧密码"
+        password
+        bind:change="onOldPasswordChange"
+        border="false"
+      />
+    </view>
+
+    <!-- 新密码 -->
+    <view class="form-item">
+      <view class="item-label">新密码</view>
+      <van-field
+        value="{{newPassword}}"
+        placeholder="请输入新密码"
+        password
+        bind:change="onNewPasswordChange"
+        border="false"
+      />
+    </view>
+
+    <!-- 确认新密码 -->
+    <view class="form-item">
+      <view class="item-label">确认新密码</view>
+      <van-field
+        value="{{confirmPassword}}"
+        placeholder="请确认新密码"
+        password
+        bind:change="onConfirmPasswordChange"
+        border="false"
+      />
+    </view>
+
+    <!-- 保存按钮 -->
+    <view class="button-container">
+      <van-button bindtap="onSave" type="primary" block size="large">保存修改</van-button>
+    </view>
+  </view>
+</view>
