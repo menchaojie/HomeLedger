@@ -50,3 +50,7 @@ ENV/
 
 ## 忽略缓存文件
 # WeApp/cache.json
+.DS_Store
+WeApp/.DS_Store
+WeApp/assets/.DS_Store
+WeApp/assets/fonts/
