@@ -36,17 +36,49 @@
   font-weight: bold;
   color: #333333;
   margin-bottom: 8rpx;
+  display: block;
+}
+
+.family-id-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
 }
 
 .family-id {
   font-size: 24rpx;
   color: #666666;
-  margin-bottom: 8rpx;
+  margin-right: 16rpx;
+}
+
+.copy-btn {
+  background-color: #bfbfb5;
+  border-radius: 8rpx;
+  padding: 8rpx 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60rpx;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.copy-btn:active {
+  background-color: #1677d9;
+  transform: scale(0.95);
+}
+
+.copy-text {
+  font-size: 20rpx;
+  color: #289259;
+  font-weight: 500;
+  line-height: 1;
 }
 
 .family-meta {
   font-size: 20rpx;
   color: #999999;
+  display: block;
 }
 
 /* 成员列表 */

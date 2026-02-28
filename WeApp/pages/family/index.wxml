@@ -2,36 +2,44 @@
   <!-- 家庭信息区 -->
   <view class="family-info">
     <view class="family-header">
-      <image class="family-avatar" src="{{family.avatar}}" mode="aspectFill"></image>
+      <image class="family-avatar" src="{{family.avatar||'/assets/default-family-avatar.png'}}" mode="aspectFill"></image>
       <view class="family-details">
-        <text class="family-name">{{family.name}}</text>
-        <text class="family-id">ID: {{family.id}}</text>
-        <text class="family-meta">成员数: {{family.memberCount}}  创建时间: {{family.createdAt}}</text>
+        <text class="family-name">家庭名：{{family.name}}</text>
+        <view class="family-id-section">
+          <text class="family-id">ID: {{family.id}}</text>
+          <view class="copy-btn" bindtap="onCopyFamilyId">
+            <text class="copy-text">复制 ID</text>
+          </view>
+        </view>
+        <text class="family-meta">成员数: {{family.memberCount}} </text>
+        <text class="family-meta">创建时间: {{family.createdAt}}</text>
       </view>
     </view>
   </view>
 
   <!-- 成员列表 -->
-  <view class="member-list">
-    <view class="section-title">家庭成员 自由支配资金 余额</view>
+  <view wx:if="{{family && members.length > 0}}" class="member-list">
+    <view class="section-title">家庭成员余额列表</view>
     <view class="members">
       <view wx:for="{{members}}" wx:key="id" class="member-item" bindtap="onMemberClick" data-index="{{index}}">
-        <image class="member-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+        <image class="member-avatar" src="{{item.avatar || '/assets/default-avatar.png'}}" mode="aspectFill"></image>
         <view class="member-info">
-          <text class="member-name">{{item.name}}</text>
-          <text class="member-role">{{item.role === 'admin' ? '管理员' : '普通成员'}}</text>
+          <text class="member-name">{{item.nickname||item.user_name || item.name}} ( {{item.user_role || '其他成员'}} )</text>
         </view>
-        <text class="member-balance">余额: {{item.balance}} 元</text>
+        <text class="member-balance">余额: {{item.balance || 0}} 元</text>
       </view>
     </view>
   </view>
 
   <!-- 操作区 -->
   <view class="action-area">
-    <view class="section-title">操作</view>
+    <view wx:if="{{family}}" >
+    <van-notice-bar 
+    text="我们是幸福的一家人，共守家庭公约，奔赴美好生活" /> </view>
+    <view wx:if="{{!family}}" class="section-title">操作</view>
     <view class="actions">
-      <van-button bindtap="onCreateFamily" type="primary" block>创建家庭</van-button>
-      <van-button bindtap="onJoinFamily" type="info" block>加入家庭</van-button>
+      <van-button wx:if="{{!family}}" bindtap="onCreateFamily" type="primary" block>创建家庭</van-button>
+      <van-button wx:if="{{!family}}" bindtap="onJoinFamily" type="info" block>加入家庭</van-button>
       <view wx:if="{{currentUser.role === 'admin'}}" class="admin-actions">
         <van-button bindtap="onSetMonthlyLimit" type="warning" block>设置每月额度</van-button>
         <van-button bindtap="onMemberApproval" type="warning" block>成员审批</van-button>

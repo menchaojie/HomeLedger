@@ -8,6 +8,7 @@ from app.models.user import User
 from app.models.family import Family, FamilyMember
 from app.schemas.family import Family as FamilySchema, FamilyCreate, FamilyUpdate, FamilyMember as FamilyMemberSchema, FamilyMemberCreate, FamilyMemberUpdate
 from app.core.dependencies import get_current_active_user
+from app.core.config import settings
 
 router = APIRouter()
 
@@ -32,6 +33,14 @@ def create_family(
     db: Session = Depends(get_db)
 ):
     """创建家庭"""
+    # 检查用户是否已经属于其他家庭
+    existing_member = db.query(FamilyMember).filter(FamilyMember.user_id == current_user.id).first()
+    if existing_member:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You can only belong to one family"
+        )
+    
     # 创建家庭
     family = Family(
         name=family_data.name,
@@ -155,6 +164,14 @@ def join_family(
     db: Session = Depends(get_db)
 ):
     """加入家庭"""
+    # 检查用户是否已经属于其他家庭
+    existing_member = db.query(FamilyMember).filter(FamilyMember.user_id == current_user.id).first()
+    if existing_member:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You can only belong to one family"
+        )
+    
     # 检查家庭是否存在
     family = db.query(Family).filter(Family.id == family_id).first()
     if not family:
@@ -186,7 +203,7 @@ def join_family(
     return {"message": "Joined family successfully"}
 
 
-@router.get("/{family_id}/members", response_model=List[FamilyMemberSchema])
+@router.get("/{family_id}/members")
 def get_family_members(
     family_id: UUID,
     current_user: User = Depends(get_current_active_user),
@@ -204,8 +221,33 @@ def get_family_members(
             detail="You are not a member of this family"
         )
     
-    members = db.query(FamilyMember).filter(FamilyMember.family_id == family_id).all()
-    return members
+    # 关联查询获取完整的成员信息
+    members = db.query(FamilyMember, User).join(
+        User, FamilyMember.user_id == User.id
+    ).filter(FamilyMember.family_id == family_id).all()
+    
+    # 构建响应数据
+    member_list = []
+    for family_member, user in members:
+        # 构建与UserSchema相同格式的avatar URL
+        avatar = f"{settings.server_domain}{settings.static_url}/avatars/{user.avatar_key}" if user.avatar_key else None
+        
+        member_data = {
+            "id": family_member.id,
+            "family_id": family_member.family_id,
+            "user_id": family_member.user_id,
+            "role": family_member.role,
+            "user_role": user.role,  # 添加用户的role信息
+            "monthly_quota": family_member.monthly_quota,
+            "joined_at": family_member.joined_at,
+            "user_name": user.user_name,
+            "nickname": user.nickname,
+            "avatar": avatar,  # 添加与UserSchema相同格式的avatar字段
+            "balance": 0  # 后续开发中会从其他表获取
+        }
+        member_list.append(member_data)
+    
+    return member_list
 
 
 @router.post("/{family_id}/members", response_model=FamilyMemberSchema)

@@ -1,5 +1,5 @@
 // 家庭页面逻辑
-const { familyAPI, authAPI } = require('../../utils/api.js');
+const { familyAPI, authAPI, getToken, isLoggedIn } = require('../../utils/api.js');
 
 Page({
   data: {
@@ -45,12 +45,44 @@ Page({
       // 获取家庭列表
       const families = await familyAPI.getFamilies();
       if (families.length > 0) {
-        const family = families[0]; // 假设用户只有一个家庭
-        this.setData({ family });
+        // 确保只显示当前用户实际加入的家庭
+        // 遍历家庭列表，找到用户所在的家庭
+        let userFamily = null;
+        for (const family of families) {
+          // 获取家庭成员列表
+          const members = await familyAPI.getFamilyMembers(family.id);
+          // 检查当前用户是否在成员列表中
+          const isMember = members.some(member => member.user_id === userInfo.id || member.userId === userInfo.id);
+          if (isMember) {
+            userFamily = family;
+            // 确保家庭数据包含必要的字段
+            const processedFamily = {
+              ...family,
+              memberCount: members.length, // 使用成员列表长度作为成员数
+              createdAt: this.formatDate(family.created_at || family.createdAt) // 处理不同的字段名并格式化时间
+            };
+            
+            this.setData({ 
+              family: processedFamily,
+              members
+            });
+            break;
+          }
+        }
         
-        // 获取家庭成员列表
-        const members = await familyAPI.getFamilyMembers(family.id);
-        this.setData({ members });
+        // 如果没有找到用户所在的家庭，清空家庭信息
+        if (!userFamily) {
+          this.setData({ 
+            family: null, 
+            members: [] 
+          });
+        }
+      } else {
+        // 没有家庭数据，清空家庭信息
+        this.setData({ 
+          family: null, 
+          members: [] 
+        });
       }
     } catch (error) {
       console.error('加载家庭数据失败:', error);
@@ -67,7 +99,7 @@ Page({
       name: 'Home Name',
       id: 'HL-1234',
       memberCount: 5,
-      createdAt: '2026-01-01',
+      createdAt: this.formatDate('2026-01-01'),
       avatar: '/assets/default-family-avatar.png'
     };
     
@@ -145,21 +177,34 @@ Page({
     wx.showModal({
       title: '加入家庭',
       content: '请输入家庭ID',
+      editable: true,
+      placeholderText: '请输入家庭ID',
       showCancel: true,
       confirmText: '提交',
       success: async (res) => {
-        if (res.confirm) {
+        if (res.confirm && res.content) {
           try {
-            // 假设家庭ID为1
-            await familyAPI.joinFamily(1);
+            const familyId = res.content.trim();
+            if (!familyId) {
+              wx.showToast({
+                title: '请输入家庭ID',
+                icon: 'none'
+              });
+              return;
+            }
+            await familyAPI.joinFamily(familyId);
             wx.showToast({
-              title: '申请已提交',
+              title: '加入成功',
               icon: 'success'
             });
             // 重新加载数据
             this.loadFamilyData();
           } catch (error) {
             console.error('加入家庭失败:', error);
+            wx.showToast({
+              title: '加入失败：' + error.message,
+              icon: 'none'
+            });
           }
         }
       }
@@ -235,5 +280,46 @@ Page({
         }
       });
     }
+  },
+
+  // 复制家庭ID
+  onCopyFamilyId() {
+    if (!this.data.family || !this.data.family.id) {
+      wx.showToast({
+        title: '家庭信息加载中',
+        icon: 'none'
+      });
+      return;
+    }
+
+    const familyId = this.data.family.id;
+    
+    // 使用微信小程序的复制功能
+    wx.setClipboardData({
+      data: familyId,
+      success: () => {
+        wx.showToast({
+          title: '家庭ID已复制',
+          icon: 'success'
+        });
+      },
+      fail: (err) => {
+        console.error('复制失败:', err);
+        wx.showToast({
+          title: '复制失败',
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  // 格式化时间为年月日
+  formatDate(dateString) {
+    if (!dateString) return '未知';
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 });
