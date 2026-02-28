@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
 from uuid import UUID
+from app.core.config import settings
 
 
 class UserBase(BaseModel):
@@ -55,7 +56,7 @@ class User(UserBase):
             'user_name': obj.user_name,  # 用户名
             'message': obj.message if obj.message else "今天也要赚钱",  # 使用数据库中的个性签名，否则使用默认值
             'balance': 0,  # 默认余额
-            'avatar': f"http://127.0.0.1:8000/static/avatars/{obj.avatar_key}" if obj.avatar_key else None,  # 处理头像字段
+            'avatar': f"{settings.server_domain}{settings.static_url}/avatars/{obj.avatar_key}" if obj.avatar_key else None,  # 处理头像字段
             'phone': obj.phone,
             'email': obj.email,
             'role': obj.role

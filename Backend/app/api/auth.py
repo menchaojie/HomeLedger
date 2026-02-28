@@ -233,7 +233,7 @@ async def upload_avatar(
         db.refresh(current_user)
         
         print(f"上传头像 - 成功: {avatar_key}")
-        return {"message": "头像上传成功", "avatar_key": avatar_key, "avatar_url": f"http://127.0.0.1:8000/static/avatars/{avatar_key}"}
+        return {"message": "头像上传成功", "avatar_key": avatar_key, "avatar_url": f"{settings.server_domain}{settings.static_url}/avatars/{avatar_key}"}
     except Exception as e:
         print(f"上传头像 - 失败: {str(e)}")
         raise HTTPException(

@@ -8,6 +8,11 @@ class Settings(BaseSettings):
     app_name: str = "HomeLedger"
     app_version: str = "1.0.0"
     
+    # 服务器配置
+    server_host: str = "127.0.0.1"
+    server_port: int = 8000
+    server_domain: str = "http://127.0.0.1:8000"
+    
     # 数据库配置
     database_url: str
     
@@ -18,6 +23,7 @@ class Settings(BaseSettings):
     
     # 文件存储配置
     upload_dir: str = "./uploads"
+    static_url: str = "/static"
     
     class Config:
         env_file = ".env"

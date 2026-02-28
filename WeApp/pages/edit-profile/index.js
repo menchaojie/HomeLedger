@@ -52,7 +52,7 @@ Page({
         
         // 使用 wx.uploadFile 上传文件
         wx.uploadFile({
-          url: 'http://127.0.0.1:8000/api/auth/me/avatar',
+          url: '/api/auth/me/avatar',
           filePath: tempFilePaths[0],
           name: 'file',
           header: {
