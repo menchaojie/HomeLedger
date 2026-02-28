@@ -1,5 +1,5 @@
 // 编辑资料页面逻辑
-const { authAPI } = require('../../utils/api.js');
+const { authAPI, API_HOST } = require('../../utils/api.js');
 
 Page({
   data: {
@@ -52,7 +52,7 @@ Page({
         
         // 使用 wx.uploadFile 上传文件
         wx.uploadFile({
-          url: '/api/auth/me/avatar',
+          url: API_HOST + '/api/auth/me/avatar',
           filePath: tempFilePaths[0],
           name: 'file',
           header: {

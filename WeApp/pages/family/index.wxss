@@ -168,3 +168,21 @@
 .van-button {
   margin-bottom: 12rpx;
 }
+
+.van-cell {
+  font-size: 25rpx !important;
+  /* background-color:#1677d9 !important ; */
+  height: 60rpx;
+  width: 100rpx;
+}
+/* .center-popup .van-popup {
+  display: flex;
+  justify-content: center;
+  align-items: center ;
+} */
+/* .content {
+  display: flex;
+  justify-content: center;
+  align-items: center ;
+  text-align: center;
+} */

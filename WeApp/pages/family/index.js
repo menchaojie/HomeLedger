@@ -3,11 +3,20 @@ const { familyAPI, authAPI, getToken, isLoggedIn } = require('../../utils/api.js
 
 Page({
   data: {
+    show: false,
     family: null,
     members: [],
     currentUser: null,
     loading: true,
     isLoggedIn: false  // 登录状态
+  },
+
+  showPopup() {
+    this.setData({ show: true });
+  },
+
+  onClose() {
+    this.setData({ show: false });
   },
 
   onLoad() {

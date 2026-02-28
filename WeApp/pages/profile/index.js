@@ -140,7 +140,7 @@ Page({
   onBalanceHistory() {
     wx.showModal({
       title: '余额变动记录',
-      content: '显示余额的历史变动',
+      content: '显示余额的历史变动(开发中）',
       showCancel: false
     });
   },
@@ -149,7 +149,7 @@ Page({
   onSubmitReward() {
     wx.showModal({
       title: '提交奖励申请',
-      content: '请填写奖励申请详情',
+      content: '请填写奖励申请详情(开发中...)',
       showCancel: true,
       confirmText: '提交',
       success: async (res) => {

@@ -15,22 +15,25 @@ Page({
 
   // 旧密码变化
   onOldPasswordChange(e) {
+    const value = e.detail.value || e.detail;
     this.setData({
-      oldPassword: e.detail.value
+      oldPassword: value
     });
   },
 
   // 新密码变化
   onNewPasswordChange(e) {
+    const value = e.detail.value || e.detail;
     this.setData({
-      newPassword: e.detail.value
+      newPassword: value
     });
   },
 
   // 确认新密码变化
   onConfirmPasswordChange(e) {
+    const value = e.detail.value || e.detail;
     this.setData({
-      confirmPassword: e.detail.value
+      confirmPassword: value
     });
   },
 
@@ -81,8 +84,10 @@ Page({
       }, 1500);
     } catch (error) {
       console.error('修改密码失败:', error);
+      console.error('错误详情:', error.message);
+      console.error('错误堆栈:', error.stack);
       wx.showToast({
-        title: '修改密码失败，请检查旧密码是否正确',
+        title: error.message || '修改密码失败，请检查旧密码是否正确',
         icon: 'none'
       });
     }

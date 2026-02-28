@@ -103,7 +103,7 @@
                 <text class="item-text">通知设置</text>
               </view>
               <view class="item-right">
-                <text class="item-value">开启</text>
+                <text class="item-value">开发中</text>
                 <van-icon name="arrow" class="item-arrow" />
               </view>
             </view>
@@ -114,6 +114,7 @@
                 <text class="item-text">系统设置</text>
               </view>
               <view class="item-right">
+                <text class="item-value">开发中</text>
                 <van-icon name="arrow" class="item-arrow" />
               </view>
             </view>
@@ -124,6 +125,7 @@
               <text class="item-text">关于应用</text>
             </view>
             <view class="item-right">
+               <text class="item-value">开发中</text>
               <van-icon name="arrow" class="item-arrow" />
             </view>
           </view>
@@ -134,6 +136,7 @@
               <text class="item-text">修改密码</text>
             </view>
             <view class="item-right">
+              <text class="item-value">点击后进入重置密码页面</text>
               <van-icon name="arrow" class="item-arrow" />
             </view>
           </view>
@@ -153,6 +156,7 @@
                 <text class="item-text logout-text">退出登录</text>
               </view>
               <view class="item-right">
+                <text class="item-value">点击后将退出当前用户</text>
                 <van-icon name="arrow" class="item-arrow" />
               </view>
             </view>
