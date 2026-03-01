@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api import auth, family, transaction, task, reward, service
+from app.api import auth, family, transaction, task, reward, service, message
 
 api_router = APIRouter()
 
@@ -11,3 +11,4 @@ api_router.include_router(transaction.router, prefix="/transactions", tags=["交
 api_router.include_router(task.router, prefix="/tasks", tags=["任务管理"])
 api_router.include_router(reward.router, prefix="/rewards", tags=["奖励管理"])
 api_router.include_router(service.router, prefix="/services", tags=["服务管理"])
+api_router.include_router(message.router, prefix="/messages", tags=["消息管理"])

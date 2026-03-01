@@ -5,6 +5,21 @@
   min-height: 100vh;
 }
 
+.badge {
+  display: inline-block;
+  background-color: #ff4d4f;
+  color: white;
+  font-size: 20rpx;
+  font-weight: bold;
+  text-align: center;
+  line-height: 36rpx;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  margin-left: 10rpx;
+  vertical-align: middle;
+}
+
 /* 个人信息区 */
 .personal-info {
   background-color: #ffffff;
@@ -15,9 +30,9 @@
 }
 
 .section-title {
-  font-size: 28rpx;
+  font-size: 22rpx;
   font-weight: bold;
-  color: #333333;
+  color: #777373;
   margin-bottom: 16rpx;
 }
 

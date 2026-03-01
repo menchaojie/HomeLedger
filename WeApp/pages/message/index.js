@@ -1,5 +1,5 @@
 // 消息中心页面逻辑
-const { authAPI } = require('../../utils/api.js');
+const { messageAPI, isLoggedIn } = require('../../utils/api.js');
 
 Page({
   data: {
@@ -11,32 +11,40 @@ Page({
     this.loadMessages();
   },
 
+  onShow() {
+    // 页面显示时刷新消息
+    this.loadMessages();
+  },
+
   // 加载消息
   async loadMessages() {
     this.setData({ loading: true });
     try {
-      // 这里应该调用后端API获取消息
-      // 暂时使用模拟数据
-      this.setData({
-        messages: [
-          {
-            id: 1,
-            type: 'quota',
-            title: '配额发放通知',
-            content: '您的2026年3月配额1000元已发放',
-            time: '2026-03-01 00:00',
-            read: false
-          },
-          {
-            id: 2,
-            type: 'system',
-            title: '系统通知',
-            content: '欢迎使用HomeLedger家庭账本系统',
-            time: '2026-02-28 10:00',
-            read: true
-          }
-        ]
-      });
+      if (!isLoggedIn()) {
+        wx.showToast({
+          title: '请先登录',
+          icon: 'none'
+        });
+        setTimeout(() => {
+          wx.navigateBack();
+        }, 1500);
+        return;
+      }
+
+      // 调用后端API获取消息
+      const messages = await messageAPI.getMessages();
+      
+      // 转换消息格式
+      const formattedMessages = messages.map(msg => ({
+        id: msg.id,
+        type: msg.type,
+        title: msg.title,
+        content: msg.content,
+        time: msg.created_at,
+        read: msg.read
+      }));
+      
+      this.setData({ messages: formattedMessages });
     } catch (error) {
       console.error('加载消息失败:', error);
       wx.showToast({
@@ -50,18 +58,43 @@ Page({
 
   // 返回上一页
   onBack() {
+    // 通知上一页（个人中心）更新未读消息数
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 2];
+    if (prevPage && prevPage.loadUnreadMessageCount) {
+      prevPage.loadUnreadMessageCount();
+    }
     wx.navigateBack();
   },
 
   // 标记消息为已读
-  markAsRead(e) {
+  async markAsRead(e) {
     const messageId = e.currentTarget.dataset.id;
-    const messages = this.data.messages.map(msg => {
-      if (msg.id === messageId) {
-        return { ...msg, read: true };
+    try {
+      // 调用后端API标记为已读
+      await messageAPI.markAsRead(messageId);
+      
+      // 更新本地状态
+      const messages = this.data.messages.map(msg => {
+        if (msg.id === messageId) {
+          return { ...msg, read: true };
+        }
+        return msg;
+      });
+      this.setData({ messages });
+      
+      // 通知上一页（个人中心）更新未读消息数
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+      if (prevPage && prevPage.loadUnreadMessageCount) {
+        prevPage.loadUnreadMessageCount();
       }
-      return msg;
-    });
-    this.setData({ messages });
+    } catch (error) {
+      console.error('标记已读失败:', error);
+      wx.showToast({
+        title: '标记已读失败',
+        icon: 'none'
+      });
+    }
   }
 });

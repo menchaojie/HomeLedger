@@ -87,8 +87,8 @@
   right: 0;
   width: 40rpx;
   height: 40rpx;
-  background-color: #1989fa;
-  border-radius: 50%;
+  background-color: #55a848;
+  border-radius: 20%;
   display: flex;
   align-items: center;
   justify-content: center;

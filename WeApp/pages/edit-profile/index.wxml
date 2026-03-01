@@ -16,9 +16,24 @@
       <view class="avatar-upload">
         <image class="avatar" src="{{formData.avatar}}" mode="aspectFill"></image>
         <view class="upload-btn" bindtap="onChooseAvatar">
-          <van-icon name="camera" size="32rpx" />
+          <!-- <van-icon name="camera" size="32rpx" /> -->
+          <van-icon name="photograph" />
+          <!-- <van-icon name="photo" /> -->
         </view>
       </view>
+    </view>
+
+
+    <!-- 用户名 -->
+    <view class="form-item">
+      <view class="item-label">用户名</view>
+      <van-field
+        value="{{formData.user_name}}"
+        placeholder="请输入用户名"
+        bind:input="onUserNameChange"
+        border="false"
+        disabled
+      />
     </view>
 
     <!-- 昵称 -->
@@ -31,18 +46,6 @@
         border="false"
       />
     </view>
-
-    <!-- 用户名 -->
-    <view class="form-item">
-      <view class="item-label">用户名</view>
-      <van-field
-        value="{{formData.user_name}}"
-        placeholder="请输入用户名"
-        bind:input="onUserNameChange"
-        border="false"
-      />
-    </view>
-
     <!-- 留言 -->
     <view class="form-item">
       <view class="item-label">留言</view>

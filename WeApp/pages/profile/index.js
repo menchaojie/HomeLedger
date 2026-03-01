@@ -1,5 +1,5 @@
 // 个人页面逻辑
-const { authAPI, rewardAPI, isLoggedIn, setToken } = require('../../utils/api.js');
+const { authAPI, rewardAPI, messageAPI, isLoggedIn, setToken } = require('../../utils/api.js');
 
 Page({
   data: {
@@ -7,8 +7,10 @@ Page({
     currentUser: null,
     loading: true,
     isLoggedIn: false,  // 登录状态
+    unreadMessageCount: 0, // 未读消息数
     groupStates: {
       personal: true,    // 个人信息分组默认展开
+      message: true,    // 消息分组默认展开
       app: false,        // 应用设置分组默认收起
       account: false     // 账户操作分组默认收起
     }
@@ -21,6 +23,22 @@ Page({
   onShow() {
     // 页面显示时重新检查登录状态
     this.loadUserData();
+  },
+
+  // 加载未读消息数
+  async loadUnreadMessageCount() {
+    try {
+      if (isLoggedIn()) {
+        const messages = await messageAPI.getMessages();
+        const unreadCount = messages.filter(msg => !msg.read).length;
+        this.setData({ unreadMessageCount: unreadCount });
+      } else {
+        this.setData({ unreadMessageCount: 0 });
+      }
+    } catch (error) {
+      console.error('加载未读消息数失败:', error);
+      this.setData({ unreadMessageCount: 0 });
+    }
   },
 
   // 加载用户数据
@@ -53,6 +71,8 @@ Page({
       this.useMockData();
     } finally {
       this.setData({ loading: false });
+      // 加载未读消息数
+      this.loadUnreadMessageCount();
     }
   },
 

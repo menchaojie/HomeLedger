@@ -1,14 +1,14 @@
 // API 工具类
 // 微信小程序开发阶段使用本地后端，生产环境使用真实域名
 // 开发环境使用完整URL，生产环境使用相对路径
-export const API_BASE_URL = 'http://127.0.0.1:8000/api';
-export const API_HOST = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
+const API_HOST = 'http://127.0.0.1:8000';
 
 // 存储 token
 let token = '';
 
 // 设置 token
-export function setToken(newToken) {
+function setToken(newToken) {
   token = newToken;
   console.log('设置 token:', newToken);
   wx.setStorageSync('token', newToken);
@@ -16,7 +16,7 @@ export function setToken(newToken) {
 }
 
 // 获取 token
-export function getToken() {
+function getToken() {
   if (!token) {
     token = wx.getStorageSync('token') || '';
     console.log('从存储获取 token:', token);
@@ -25,7 +25,7 @@ export function getToken() {
 }
 
 // 检查是否已登录
-export function isLoggedIn() {
+function isLoggedIn() {
   return !!getToken();
 }
 
@@ -90,7 +90,7 @@ async function request(url, options = {}) {
 }
 
 // 认证相关 API
-export const authAPI = {
+const authAPI = {
   // 登录
   async login(username, password) {
     const data = await request('/auth/login', {
@@ -139,7 +139,7 @@ export const authAPI = {
 };
 
 // 家庭相关 API
-export const familyAPI = {
+const familyAPI = {
   // 获取家庭列表
   async getFamilies() {
     return request('/families');
@@ -202,7 +202,7 @@ export const familyAPI = {
 };
 
 // 交易相关 API
-export const transactionAPI = {
+const transactionAPI = {
   // 获取交易记录
   async getTransactions() {
     return request('/transactions');
@@ -252,7 +252,7 @@ export const transactionAPI = {
 };
 
 // 任务相关 API
-export const taskAPI = {
+const taskAPI = {
   // 获取任务列表
   async getTasks() {
     return request('/tasks');
@@ -288,7 +288,7 @@ export const taskAPI = {
 };
 
 // 奖励相关 API
-export const rewardAPI = {
+const rewardAPI = {
   // 获取奖励列表
   async getRewards() {
     return request('/rewards');
@@ -323,8 +323,33 @@ export const rewardAPI = {
   }
 };
 
+// 消息API
+const messageAPI = {
+  // 获取消息列表
+  async getMessages() {
+    return request('/messages');
+  },
+
+  // 标记消息为已读
+  async markAsRead(messageId) {
+    return request(`/messages/${messageId}`, {
+      method: 'PUT',
+      data: {
+        read: true
+      }
+    });
+  },
+
+  // 删除消息
+  async deleteMessage(messageId) {
+    return request(`/messages/${messageId}`, {
+      method: 'DELETE'
+    });
+  }
+};
+
 // 服务相关 API
-export const serviceAPI = {
+const serviceAPI = {
   // 获取服务列表
   async getServices() {
     return request('/services');
@@ -357,4 +382,20 @@ export const serviceAPI = {
       method: 'DELETE'
     });
   }
+};
+
+// 导出所有API
+module.exports = {
+  API_BASE_URL,
+  API_HOST,
+  setToken,
+  getToken,
+  isLoggedIn,
+  authAPI,
+  familyAPI,
+  transactionAPI,
+  taskAPI,
+  rewardAPI,
+  messageAPI,
+  serviceAPI
 };

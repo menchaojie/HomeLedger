@@ -4,6 +4,7 @@ from app.models.transaction import TransactionEvent, MemberBalanceSnapshot
 from app.models.service import Service
 from app.models.task import BountyTask
 from app.models.reward import Reward
+from app.models.message import Message
 
 __all__ = [
     "User",
@@ -13,5 +14,6 @@ __all__ = [
     "MemberBalanceSnapshot",
     "Service",
     "BountyTask",
-    "Reward"
+    "Reward",
+    "Message"
 ]

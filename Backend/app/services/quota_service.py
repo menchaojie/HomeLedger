@@ -59,6 +59,16 @@ def allocate_monthly_quota():
                 # 更新余额快照
                 update_balance_snapshot(db, member.id, member.monthly_quota)
                 
+                # 创建消息通知
+                from app.models.message import Message
+                message = Message(
+                    user_id=member.user_id,
+                    title="配额发放通知",
+                    content=f"您的{current_year}年{current_month}月配额{member.monthly_quota}元已发放",
+                    type="quota"
+                )
+                db.add(message)
+                
                 allocated_count += 1
                 logger.info(f"Allocated quota {member.monthly_quota} to member {member.id}")
                 
@@ -124,6 +134,16 @@ def allocate_quota_manually(member_id: str):
         
         # 更新余额快照
         update_balance_snapshot(db, member.id, member.monthly_quota)
+        
+        # 创建消息通知
+        from app.models.message import Message
+        message = Message(
+            user_id=member.user_id,
+            title="配额发放通知",
+            content=f"您的{current_year}年{current_month}月配额{member.monthly_quota}元已发放",
+            type="quota"
+        )
+        db.add(message)
         
         db.commit()
         logger.info(f"Manually allocated quota {member.monthly_quota} to member {member_id}")
@@ -192,6 +212,16 @@ def allocate_quota_to_all_members(family_id: str):
                 
                 # 更新余额快照
                 update_balance_snapshot(db, member.id, member.monthly_quota)
+                
+                # 创建消息通知
+                from app.models.message import Message
+                message = Message(
+                    user_id=member.user_id,
+                    title="配额发放通知",
+                    content=f"您的{current_year}年{current_month}月配额{member.monthly_quota}元已发放",
+                    type="quota"
+                )
+                db.add(message)
                 
                 total_quota += float(member.monthly_quota)
                 allocated_count += 1
