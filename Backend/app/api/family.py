@@ -295,6 +295,50 @@ def add_family_member(
     return member
 
 
+@router.put("/{family_id}/members/{member_id}")
+def update_family_member(
+    family_id: UUID,
+    member_id: UUID,
+    member_data: FamilyMemberUpdate,
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """更新家庭成员信息"""
+    # 检查用户是否是家庭管理员
+    admin_member = db.query(FamilyMember).filter(
+        FamilyMember.family_id == family_id,
+        FamilyMember.user_id == current_user.id,
+        FamilyMember.role == "admin"
+    ).first()
+    if not admin_member:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not an admin of this family"
+        )
+    
+    # 检查成员是否存在
+    member = db.query(FamilyMember).filter(
+        FamilyMember.id == member_id,
+        FamilyMember.family_id == family_id
+    ).first()
+    if not member:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Member not found"
+        )
+    
+    # 更新成员信息
+    if member_data.role is not None:
+        member.role = member_data.role
+    if member_data.monthly_quota is not None:
+        member.monthly_quota = member_data.monthly_quota
+    
+    db.commit()
+    db.refresh(member)
+    
+    return member
+
+
 @router.delete("/{family_id}/members/{member_id}")
 def remove_family_member(
     family_id: UUID,

@@ -1,0 +1,43 @@
+<view class="container">
+  <view class="header">
+    <van-nav-bar title="设置每月额度" left-text="返回" bind:click-left="onBack" />
+  </view>
+  
+  <view class="content">
+    <view class="section-title">家庭成员每月额度设置</view>
+    <view class="tip">设置每个家庭成员的每月自由支配资金额度</view>
+    
+    <view class="member-list">
+      <view wx:for="{{members}}" wx:key="id" class="member-item">
+        <view class="member-info">
+          <image class="member-avatar" src="{{item.avatar || '/assets/default-avatar.png'}}" mode="aspectFill"></image>
+          <view class="member-details">
+            <text class="member-name">{{item.name || item.nickname || '未命名'}}</text>
+            <text class="member-role">{{item.role === 'admin' ? '管理员' : '普通成员'}}</text>
+          </view>
+        </view>
+        <view class="quota-input">
+          <input 
+            class="input" 
+            type="number" 
+            placeholder="请输入每月额度" 
+            value="{{item.monthly_quota || 0}}"
+            bindinput="onQuotaChange" 
+            data-index="{{index}}"
+          />
+          <text class="unit">元</text>
+        </view>
+      </view>
+    </view>
+    
+    <van-button 
+      bindtap="onSave" 
+      type="primary" 
+      block 
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      保存设置
+    </van-button>
+  </view>
+</view>

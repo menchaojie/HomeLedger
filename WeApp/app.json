@@ -6,6 +6,7 @@
     "pages/test/index",
     "pages/register/index",
     "pages/login/index",
+    "pages/set-quota/index",
     "pages/change-password/index",
     "pages/edit-profile/index"
   ],

@@ -231,30 +231,8 @@ Page({
   // 设置每月额度
   onSetMonthlyLimit() {
     if (this.data.currentUser && this.data.currentUser.familyRole === 'admin') {
-      wx.showModal({
-        title: '设置每月额度',
-        content: '请输入每月自由支配资金额度',
-        showCancel: true,
-        confirmText: '提交',
-        success: async (res) => {
-          if (res.confirm) {
-            try {
-              if (this.data.family) {
-                await familyAPI.updateFamily(this.data.family.id, {
-                  monthly_allowance: 1000 // 假设设置为1000元
-                });
-                wx.showToast({
-                  title: '设置成功',
-                  icon: 'success'
-                });
-                // 重新加载数据
-                this.loadFamilyData();
-              }
-            } catch (error) {
-              console.error('设置每月额度失败:', error);
-            }
-          }
-        }
+      wx.navigateTo({
+        url: '/pages/set-quota/index'
       });
     }
   },

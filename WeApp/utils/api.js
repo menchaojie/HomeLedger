@@ -185,11 +185,11 @@ export const familyAPI = {
     return request(`/families/${familyId}/members`);
   },
 
-  // 更新成员角色
-  async updateMemberRole(familyId, memberId, role) {
+  // 更新成员角色和额度
+  async updateMemberRole(familyId, memberId, role, monthlyQuota) {
     return request(`/families/${familyId}/members/${memberId}`, {
       method: 'PUT',
-      data: { role }
+      data: { role, monthly_quota: monthlyQuota }
     });
   },
 
