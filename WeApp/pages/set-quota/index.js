@@ -141,15 +141,33 @@ Page({
       return;
     }
 
+    // 检查本月是否已经发放过配额
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    
+    // 检查成员中是否有已经发放过配额的
+    const alreadyAllocatedMembers = this.data.members.filter(member => {
+      // 这里可以根据需要检查交易记录，暂时简单处理
+      // 实际项目中应该从API获取发放状态
+      return false; // 暂时返回false，实际应该根据后端返回的状态
+    });
+
     // 计算总配额金额
     const totalQuota = this.data.members.reduce((sum, member) => {
       return sum + (parseFloat(member.monthly_quota) || 0);
     }, 0);
 
     // 显示确认对话框
+    let content = `确定要一次性为所有 ${this.data.members.length} 名家庭成员发放配额吗？\n总金额：${totalQuota} 元`;
+    
+    if (alreadyAllocatedMembers.length > 0) {
+      content += `\n\n注意：有 ${alreadyAllocatedMembers.length} 名成员本月已发放过配额，将跳过这些成员。`;
+    }
+
     wx.showModal({
       title: '确认发放配额',
-      content: `确定要一次性为所有 ${this.data.members.length} 名家庭成员发放配额吗？\n总金额：${totalQuota} 元`,
+      content: content,
       showCancel: true,
       confirmText: '确认发放',
       success: async (res) => {
@@ -159,21 +177,49 @@ Page({
             
             // 调用批量发放配额API
             const transactionAPI = require('../../utils/api.js').transactionAPI;
-            await transactionAPI.allocateQuotaToAllMembers(this.data.family.id);
+            const result = await transactionAPI.allocateQuotaToAllMembers(this.data.family.id);
             
-            wx.showToast({
-              title: '配额发放成功',
-              icon: 'success'
-            });
+            // 根据后端返回的状态显示不同的提示
+            if (result && result.status === 'no_allocation_needed') {
+              wx.showModal({
+                title: '配额发放',
+                content: result.message || '本月配额已发放过，没有成员需要发放配额。',
+                showCancel: false,
+                confirmText: '确定'
+              });
+            } else if (result && result.status === 'success') {
+              wx.showModal({
+                title: '配额发放成功',
+                content: result.message || `配额发放成功，共为 ${result.allocated_count} 名成员发放配额。`,
+                showCancel: false,
+                confirmText: '确定'
+              });
+            } else {
+              wx.showToast({
+                title: '配额发放成功',
+                icon: 'success'
+              });
+            }
             
             // 刷新数据
             this.loadData();
           } catch (error) {
             console.error('配额发放失败:', error);
-            wx.showToast({
-              title: '发放失败：' + error.message,
-              icon: 'none'
-            });
+            
+            // 检查是否是重复发放的错误
+            if (error.message && error.message.includes('already received')) {
+              wx.showModal({
+                title: '配额发放失败',
+                content: '本月配额已发放过，不能重复发放。',
+                showCancel: false,
+                confirmText: '确定'
+              });
+            } else {
+              wx.showToast({
+                title: '发放失败：' + error.message,
+                icon: 'none'
+              });
+            }
           } finally {
             this.setData({ loading: false });
           }

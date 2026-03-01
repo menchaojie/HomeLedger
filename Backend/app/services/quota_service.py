@@ -22,8 +22,28 @@ def allocate_monthly_quota():
         
         logger.info(f"Found {len(members)} members with monthly quota")
         
+        # 检查本月是否已经发放过配额
+        current_year = datetime.now().year
+        current_month = datetime.now().month
+        
+        # 导入 SQLAlchemy 的 extract 函数
+        from sqlalchemy import extract
+        
+        allocated_count = 0
         for member in members:
             try:
+                # 检查该成员本月是否已经发放过配额
+                existing_quota = db.query(TransactionEvent).filter(
+                    TransactionEvent.to_member_id == member.id,
+                    TransactionEvent.event_type == "quota_allocation",
+                    extract('year', TransactionEvent.created_at) == current_year,
+                    extract('month', TransactionEvent.created_at) == current_month
+                ).first()
+                
+                if existing_quota:
+                    logger.warning(f"Member {member.id} already received quota for {current_year}-{current_month}, skipping")
+                    continue
+                
                 # 创建配额发放交易事件
                 transaction = TransactionEvent(
                     family_id=member.family_id,
@@ -31,7 +51,7 @@ def allocate_monthly_quota():
                     amount=member.monthly_quota,
                     from_member_id=None,  # 配额发放没有付款方
                     to_member_id=member.id,
-                    description=f"2026年{datetime.now().month}月配额发放",
+                    description=f"{current_year}年{current_month}月配额发放",
                     created_by=member.user_id  # 使用成员自己的ID作为创建者
                 )
                 db.add(transaction)
@@ -39,6 +59,7 @@ def allocate_monthly_quota():
                 # 更新余额快照
                 update_balance_snapshot(db, member.id, member.monthly_quota)
                 
+                allocated_count += 1
                 logger.info(f"Allocated quota {member.monthly_quota} to member {member.id}")
                 
             except Exception as e:
@@ -47,7 +68,7 @@ def allocate_monthly_quota():
                 continue
         
         db.commit()
-        logger.info("Monthly quota allocation completed successfully")
+        logger.info(f"Monthly quota allocation completed successfully, allocated to {allocated_count} members")
         
     except Exception as e:
         logger.error(f"Error in monthly quota allocation: {str(e)}")
@@ -71,6 +92,24 @@ def allocate_quota_manually(member_id: str):
             logger.error(f"Member {member_id} has no monthly quota set")
             return False
         
+        # 检查本月是否已经发放过配额
+        current_year = datetime.now().year
+        current_month = datetime.now().month
+        
+        # 导入 SQLAlchemy 的 extract 函数
+        from sqlalchemy import extract
+        
+        existing_quota = db.query(TransactionEvent).filter(
+            TransactionEvent.to_member_id == member_id,
+            TransactionEvent.event_type == "quota_allocation",
+            extract('year', TransactionEvent.created_at) == current_year,
+            extract('month', TransactionEvent.created_at) == current_month
+        ).first()
+        
+        if existing_quota:
+            logger.warning(f"Member {member_id} already received quota for {current_year}-{current_month}")
+            return False
+        
         # 创建配额发放交易事件
         transaction = TransactionEvent(
             family_id=member.family_id,
@@ -78,7 +117,7 @@ def allocate_quota_manually(member_id: str):
             amount=member.monthly_quota,
             from_member_id=None,
             to_member_id=member.id,
-            description=f"手动发放{datetime.now().year}年{datetime.now().month}月配额",
+            description=f"手动发放{current_year}年{current_month}月配额",
             created_by=member.user_id
         )
         db.add(transaction)
@@ -109,15 +148,36 @@ def allocate_quota_to_all_members(family_id: str):
             FamilyMember.monthly_quota > 0
         ).all()
         
-        logger.info(f"Found {len(members)} members with monthly quota in family {family_id}")
+        total_members = len(members)
+        logger.info(f"Found {total_members} members with monthly quota in family {family_id}")
         
-        if len(members) == 0:
+        if total_members == 0:
             logger.warning(f"No members with monthly quota found in family {family_id}")
-            return True  # 没有成员需要发放配额，也算成功
+            return True, 0, total_members  # 没有成员需要发放配额，也算成功
+        
+        # 检查本月是否已经发放过配额
+        current_year = datetime.now().year
+        current_month = datetime.now().month
+        
+        # 导入 SQLAlchemy 的 extract 函数
+        from sqlalchemy import extract
         
         total_quota = 0
+        allocated_count = 0
         for member in members:
             try:
+                # 检查该成员本月是否已经发放过配额
+                existing_quota = db.query(TransactionEvent).filter(
+                    TransactionEvent.to_member_id == member.id,
+                    TransactionEvent.event_type == "quota_allocation",
+                    extract('year', TransactionEvent.created_at) == current_year,
+                    extract('month', TransactionEvent.created_at) == current_month
+                ).first()
+                
+                if existing_quota:
+                    logger.warning(f"Member {member.id} already received quota for {current_year}-{current_month}, skipping")
+                    continue
+                
                 # 创建配额发放交易事件
                 transaction = TransactionEvent(
                     family_id=member.family_id,
@@ -125,7 +185,7 @@ def allocate_quota_to_all_members(family_id: str):
                     amount=member.monthly_quota,
                     from_member_id=None,
                     to_member_id=member.id,
-                    description=f"手动批量发放{datetime.now().year}年{datetime.now().month}月配额",
+                    description=f"手动批量发放{current_year}年{current_month}月配额",
                     created_by=member.user_id
                 )
                 db.add(transaction)
@@ -134,6 +194,7 @@ def allocate_quota_to_all_members(family_id: str):
                 update_balance_snapshot(db, member.id, member.monthly_quota)
                 
                 total_quota += float(member.monthly_quota)
+                allocated_count += 1
                 logger.info(f"Allocated quota {member.monthly_quota} to member {member.id}")
                 
             except Exception as e:
@@ -142,12 +203,12 @@ def allocate_quota_to_all_members(family_id: str):
                 continue
         
         db.commit()
-        logger.info(f"Batch allocated total quota {total_quota} to {len(members)} members in family {family_id}")
-        return True
+        logger.info(f"Batch allocated total quota {total_quota} to {allocated_count} members in family {family_id}")
+        return True, allocated_count, total_members
         
     except Exception as e:
         logger.error(f"Error in batch quota allocation: {str(e)}")
         db.rollback()
-        return False
+        return False, 0, 0
     finally:
         db.close()

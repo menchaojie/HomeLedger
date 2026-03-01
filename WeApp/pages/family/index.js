@@ -143,8 +143,9 @@ Page({
   onMemberClick(e) {
     const member = this.data.members[e.currentTarget.dataset.index];
     wx.showModal({
-      title: member.name + ' 的余额',
+      title: member.user_name + ' 的余额',
       content: '当前余额: ' + (member.balance || 0) + ' 元',
+      // content: JSON.stringify(member, null, 2),
       showCancel: false
     });
   },

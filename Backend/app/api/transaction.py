@@ -225,7 +225,7 @@ def allocate_quota_to_all_members(
     
     # 调用批量发放配额服务
     from app.services.quota_service import allocate_quota_to_all_members as bulk_allocate
-    success = bulk_allocate(str(family_id))
+    success, allocated_count, total_members = bulk_allocate(str(family_id))
     
     if not success:
         raise HTTPException(
@@ -233,4 +233,17 @@ def allocate_quota_to_all_members(
             detail="Failed to allocate quota to all members"
         )
     
-    return {"message": "Quota allocated to all members successfully"}
+    if allocated_count == 0:
+        return {
+            "message": "本月配额已发放过，没有成员需要发放配额",
+            "allocated_count": allocated_count,
+            "total_members": total_members,
+            "status": "no_allocation_needed"
+        }
+    
+    return {
+        "message": f"配额发放成功，共为 {allocated_count} 名成员发放配额",
+        "allocated_count": allocated_count,
+        "total_members": total_members,
+        "status": "success"
+    }
