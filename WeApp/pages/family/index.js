@@ -61,8 +61,8 @@ Page({
           // 获取家庭成员列表
           const members = await familyAPI.getFamilyMembers(family.id);
           // 检查当前用户是否在成员列表中
-          const isMember = members.some(member => member.user_id === userInfo.id || member.userId === userInfo.id);
-          if (isMember) {
+          const currentMember = members.find(member => member.user_id === userInfo.id || member.userId === userInfo.id);
+          if (currentMember) {
             userFamily = family;
             // 确保家庭数据包含必要的字段
             const processedFamily = {
@@ -71,9 +71,16 @@ Page({
               createdAt: this.formatDate(family.created_at || family.createdAt) // 处理不同的字段名并格式化时间
             };
             
+            // 构建包含家庭成员角色的当前用户信息
+            const currentUserWithRole = {
+              ...userInfo,
+              familyRole: currentMember.role // 使用家庭成员表中的角色
+            };
+            
             this.setData({ 
               family: processedFamily,
-              members
+              members,
+              currentUser: currentUserWithRole
             });
             break;
           }
@@ -121,7 +128,8 @@ Page({
     ];
     
     const mockCurrentUser = {
-      role: 'admin' // 模拟当前用户是管理员
+      role: 'admin', // 模拟用户表中的角色
+      familyRole: 'admin' // 模拟家庭成员表中的角色
     };
     
     this.setData({
@@ -222,7 +230,7 @@ Page({
 
   // 设置每月额度
   onSetMonthlyLimit() {
-    if (this.data.currentUser && this.data.currentUser.role === 'admin') {
+    if (this.data.currentUser && this.data.currentUser.familyRole === 'admin') {
       wx.showModal({
         title: '设置每月额度',
         content: '请输入每月自由支配资金额度',
@@ -253,10 +261,10 @@ Page({
 
   // 成员审批
   onMemberApproval() {
-    if (this.data.currentUser && this.data.currentUser.role === 'admin') {
+    if (this.data.currentUser && this.data.currentUser.familyRole === 'admin') {
       wx.showModal({
         title: '成员审批',
-        content: '查看和审批成员加入请求',
+        content: '查看和审批成员加入请求(开发中）',
         showCancel: true,
         confirmText: '查看',
         success: (res) => {
@@ -273,10 +281,10 @@ Page({
 
   // 奖励审批
   onRewardApproval() {
-    if (this.data.currentUser && this.data.currentUser.role === 'admin') {
+    if (this.data.currentUser && this.data.currentUser.familyRole === 'admin') {
       wx.showModal({
         title: '奖励审批',
-        content: '查看和审批奖励申请',
+        content: '查看和审批奖励申请(开发中）',
         showCancel: true,
         confirmText: '查看',
         success: (res) => {

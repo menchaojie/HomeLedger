@@ -46,18 +46,19 @@
 
   <!-- 操作区 -->
   <view class="action-area">
-    <view wx:if="{{family}}" >
-    <van-notice-bar scrollable  wrapable style="--notice-bar-font-size: 10px;" 
-    text="我们是幸福的一家人，共守家庭公约，奔赴美好生活" /> </view>
+
     <view wx:if="{{!family}}" class="section-title">操作</view>
     <view class="actions">
       <van-button wx:if="{{!family}}" bindtap="onCreateFamily" plain type="primary" block>创建家庭</van-button>
       <van-button wx:if="{{!family}}" bindtap="onJoinFamily" plain type="info" block>加入家庭</van-button>
-      <view wx:if="{{currentUser.role === 'admin'}}" class="admin-actions">
-        <van-button bindtap="onSetMonthlyLimit" type="warning" block>设置每月额度</van-button>
-        <van-button bindtap="onMemberApproval" type="warning" block>成员审批</van-button>
-        <van-button bindtap="onRewardApproval" type="warning" block>奖励审批</van-button>
+      <view wx:if="{{currentUser.familyRole === 'admin'}}" class="admin-actions">
+        <van-button bindtap="onSetMonthlyLimit" plain type="warning" block>设置每月额度</van-button>
+        <van-button bindtap="onMemberApproval" plain type="warning" block>成员审批</van-button>
+        <van-button bindtap="onRewardApproval" plain type="warning" block>奖励审批</van-button>
       </view>
     </view>
+    <view wx:if="{{family}}" >
+    <van-notice-bar scrollable  wrapable style="--notice-bar-font-size: 10px;" 
+    text="我们是幸福的一家人，共守家庭公约，奔赴美好生活" /> </view>
   </view>
 </view>
