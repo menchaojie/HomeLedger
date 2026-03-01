@@ -97,6 +97,15 @@
             <van-icon name="{{groupStates.app ? 'arrow-down' : 'arrow'}}" class="group-arrow" />
           </view>
           <view class="group-content" wx:if="{{groupStates.app}}">
+            <view class="settings-item" bindtap="onMessageCenter">
+              <view class="item-left">
+                <van-icon name="chat-o" class="item-icon" />
+                <text class="item-text">消息中心</text>
+              </view>
+              <view class="item-right">
+                <van-icon name="arrow" class="item-arrow" />
+              </view>
+            </view>
             <view class="settings-item" bindtap="onNotificationSettings">
               <view class="item-left">
                 <van-icon name="bell-o" class="item-icon" />

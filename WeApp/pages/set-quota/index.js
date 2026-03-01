@@ -129,5 +129,56 @@ Page({
   // 返回
   onBack() {
     wx.navigateBack();
+  },
+
+  // 手动发放配额 - 一次性发放所有成员
+  onManualQuotaAllocation() {
+    if (!this.data.family || this.data.members.length === 0) {
+      wx.showToast({
+        title: '家庭信息加载中',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 计算总配额金额
+    const totalQuota = this.data.members.reduce((sum, member) => {
+      return sum + (parseFloat(member.monthly_quota) || 0);
+    }, 0);
+
+    // 显示确认对话框
+    wx.showModal({
+      title: '确认发放配额',
+      content: `确定要一次性为所有 ${this.data.members.length} 名家庭成员发放配额吗？\n总金额：${totalQuota} 元`,
+      showCancel: true,
+      confirmText: '确认发放',
+      success: async (res) => {
+        if (res.confirm) {
+          try {
+            this.setData({ loading: true });
+            
+            // 调用批量发放配额API
+            const transactionAPI = require('../../utils/api.js').transactionAPI;
+            await transactionAPI.allocateQuotaToAllMembers(this.data.family.id);
+            
+            wx.showToast({
+              title: '配额发放成功',
+              icon: 'success'
+            });
+            
+            // 刷新数据
+            this.loadData();
+          } catch (error) {
+            console.error('配额发放失败:', error);
+            wx.showToast({
+              title: '发放失败：' + error.message,
+              icon: 'none'
+            });
+          } finally {
+            this.setData({ loading: false });
+          }
+        }
+      }
+    });
   }
 });

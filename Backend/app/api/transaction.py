@@ -162,3 +162,75 @@ def get_transaction(
         )
     
     return transaction
+
+@router.post("/quota-allocation/{member_id}")
+def allocate_quota_manually(
+    member_id: UUID,
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """手动发放配额"""
+    # 检查用户是否是家庭成员
+    member = db.query(FamilyMember).filter(
+        FamilyMember.id == member_id
+    ).first()
+    if not member:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Member not found"
+        )
+    
+    # 检查用户是否是家庭管理员
+    admin_member = db.query(FamilyMember).filter(
+        FamilyMember.family_id == member.family_id,
+        FamilyMember.user_id == current_user.id,
+        FamilyMember.role == "admin"
+    ).first()
+    if not admin_member:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not an admin of this family"
+        )
+    
+    # 调用手动发放配额服务
+    from app.services.quota_service import allocate_quota_manually as manual_allocate
+    success = manual_allocate(str(member_id))
+    
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to allocate quota"
+        )
+    
+    return {"message": "Quota allocated successfully"}
+
+@router.post("/quota-allocation/family/{family_id}")
+def allocate_quota_to_all_members(
+    family_id: UUID,
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """批量发放配额给所有家庭成员"""
+    # 检查用户是否是家庭管理员
+    admin_member = db.query(FamilyMember).filter(
+        FamilyMember.family_id == family_id,
+        FamilyMember.user_id == current_user.id,
+        FamilyMember.role == "admin"
+    ).first()
+    if not admin_member:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not an admin of this family"
+        )
+    
+    # 调用批量发放配额服务
+    from app.services.quota_service import allocate_quota_to_all_members as bulk_allocate
+    success = bulk_allocate(str(family_id))
+    
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to allocate quota to all members"
+        )
+    
+    return {"message": "Quota allocated to all members successfully"}

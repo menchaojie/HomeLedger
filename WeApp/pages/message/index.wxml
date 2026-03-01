@@ -1,0 +1,31 @@
+<view class="container">
+  <view class="header">
+    <van-nav-bar title="消息中心" left-text="返回" bind:click-left="onBack" />
+  </view>
+  
+  <view class="content">
+    <view class="section-title">通知消息</view>
+    
+    <view class="message-list">
+      <view wx:for="{{messages}}" wx:key="id" class="message-item" bindtap="markAsRead" data-id="{{item.id}}">
+        <view class="message-icon">
+          <view class="icon-circle">
+            <text class="icon">{{item.type === 'quota' ? '配额' : '系统'}}</text>
+          </view>
+        </view>
+        <view class="message-content">
+          <text class="message-title">{{item.title}}</text>
+          <text class="message-body">{{item.content}}</text>
+          <text class="message-time">{{item.time}}</text>
+        </view>
+        <view class="message-status" wx:if="!item.read">
+          <view class="unread-dot"></view>
+        </view>
+      </view>
+      
+      <view wx:if="messages.length === 0" class="empty-message">
+        <text>暂无消息</text>
+      </view>
+    </view>
+  </view>
+</view>

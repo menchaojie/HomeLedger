@@ -40,3 +40,7 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
+# 启动调度器
+from app.core.scheduler import start_scheduler
+start_scheduler()

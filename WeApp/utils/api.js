@@ -234,6 +234,20 @@ export const transactionAPI = {
     return request(`/transactions/${transactionId}`, {
       method: 'DELETE'
     });
+  },
+
+  // 手动发放配额
+  async allocateQuotaManually(memberId) {
+    return request(`/transactions/quota-allocation/${memberId}`, {
+      method: 'POST'
+    });
+  },
+
+  // 批量发放配额给所有成员
+  async allocateQuotaToAllMembers(familyId) {
+    return request(`/transactions/quota-allocation/family/${familyId}`, {
+      method: 'POST'
+    });
   }
 };
 

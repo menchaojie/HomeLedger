@@ -30,14 +30,15 @@
       </view>
     </view>
     
-    <van-button 
-      bindtap="onSave" 
-      type="primary" 
-      block 
-      loading="{{loading}}"
-      disabled="{{loading}}"
-    >
-      保存设置
-    </van-button>
+    <view>
+    <van-button bindtap="onSave" plain  type="primary" block 
+    loading="{{loading}}" disabled="{{loading}}" 
+    style="margin-bottom: 116rpx;"
+    > 保存设置 </van-button>
+    <view style="height: 24rpx;"></view>
+    <van-button bindtap="onManualQuotaAllocation" plain 
+    type="primary" block loading="{{loading}}" disabled="{{loading}}" > 
+    手动发放配额 </van-button>
+  </view>
   </view>
 </view>

@@ -236,6 +236,13 @@ Page({
     });
   },
 
+  // 消息中心
+  onMessageCenter() {
+    wx.navigateTo({
+      url: '/pages/message/index'
+    });
+  },
+
   // 通知设置
   onNotificationSettings() {
     wx.showModal({

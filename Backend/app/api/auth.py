@@ -127,10 +127,35 @@ def refresh_token(current_user: User = Depends(get_current_active_user)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/me", response_model=UserSchema)
-def get_current_user_info(current_user: User = Depends(get_current_active_user)):
+@router.get("/me")
+def get_current_user_info(
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
     """获取当前用户信息"""
-    return UserSchema.from_orm(current_user)
+    # 获取用户基本信息
+    user_data = UserSchema.from_orm(current_user).dict()
+    
+    # 获取用户的余额信息
+    from app.models.transaction import MemberBalanceSnapshot
+    from app.models.family import FamilyMember
+    
+    # 查找用户所在的家庭成员记录
+    family_member = db.query(FamilyMember).filter(
+        FamilyMember.user_id == current_user.id
+    ).first()
+    
+    if family_member:
+        # 获取余额快照
+        balance_snapshot = db.query(MemberBalanceSnapshot).filter(
+            MemberBalanceSnapshot.member_id == family_member.id
+        ).first()
+        balance = float(balance_snapshot.balance) if balance_snapshot else 0.0
+        user_data["balance"] = balance
+    else:
+        user_data["balance"] = 0.0
+    
+    return user_data
 
 
 from app.schemas.user import UserUpdate

@@ -52,7 +52,7 @@
       <van-button wx:if="{{!family}}" bindtap="onCreateFamily" plain type="primary" block>创建家庭</van-button>
       <van-button wx:if="{{!family}}" bindtap="onJoinFamily" plain type="info" block>加入家庭</van-button>
       <view wx:if="{{currentUser.familyRole === 'admin'}}" class="admin-actions">
-        <van-button bindtap="onSetMonthlyLimit" plain type="warning" block>设置每月额度</van-button>
+        <van-button bindtap="onQuotaManagement" plain type="warning" block>配额管理</van-button>
         <van-button bindtap="onMemberApproval" plain type="warning" block>成员审批</van-button>
         <van-button bindtap="onRewardApproval" plain type="warning" block>奖励审批</van-button>
       </view>

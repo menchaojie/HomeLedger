@@ -228,8 +228,8 @@ Page({
     });
   },
 
-  // 设置每月额度
-  onSetMonthlyLimit() {
+  // 配额管理
+  onQuotaManagement() {
     if (this.data.currentUser && this.data.currentUser.familyRole === 'admin') {
       wx.navigateTo({
         url: '/pages/set-quota/index'
