@@ -72,20 +72,21 @@ Page({
         end_date: endDate
       });
       
-      console.log('获取到的交易记录数据:', transactions);
       if (transactions && transactions.length > 0) {
-        console.log('第一条交易记录的时间字段:', transactions[0].created_at);
-        
-        // 预先格式化时间
-        const formattedTransactions = transactions.map(item => ({
-          ...item,
+        // 只保留必要字段，减少数据传输
+        const simplifiedTransactions = transactions.map(item => ({
+          id: item.id,
+          description: item.description,
+          amount: item.amount,
+          event_type: item.event_type,
+          status: item.status,
+          created_at: item.created_at,
           formatted_time: this.formatTime(item.created_at)
         }));
         
-        console.log('格式化后的交易记录:', formattedTransactions);
-        this.setData({ transactions: formattedTransactions });
+        this.setData({ transactions: simplifiedTransactions });
       } else {
-        this.setData({ transactions });
+        this.setData({ transactions: transactions || [] });
       }
     } catch (error) {
       console.error('加载交易记录失败:', error);
