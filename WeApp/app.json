@@ -9,7 +9,8 @@
     "pages/set-quota/index",
     "pages/change-password/index",
     "pages/edit-profile/index",
-    "pages/message/index"
+    "pages/message/index",
+    "pages/balance-history/index"
   ],
   "window": {
     "navigationBarTextStyle": "white",
@@ -63,6 +64,11 @@
   ],
   "usingComponents": {
     "van-button": "@vant/weapp/button/index",
-    "van-notice-bar": "@vant/weapp/notice-bar/index"
+    "van-notice-bar": "@vant/weapp/notice-bar/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+    "van-calendar": "@vant/weapp/calendar/index"
   }
 }

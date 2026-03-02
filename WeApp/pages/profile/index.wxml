@@ -50,9 +50,9 @@
       <view class="section-title">奖励申请</view>
       <view class="reward-content">
         <van-button bindtap="onSubmitReward" plain type="primary" block>提交奖励申请</van-button>
-        <view wx:if="{{currentUser.role === 'admin'}}">
+        <!-- <view wx:if="{{currentUser.role === 'admin'}}">
           <van-button bindtap="onRewardApproval" type="warning" block>奖励审批</van-button>
-        </view>
+        </view> -->
       </view>
     </view>
 

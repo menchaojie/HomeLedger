@@ -158,10 +158,8 @@ Page({
 
   // 查看余额变动记录
   onBalanceHistory() {
-    wx.showModal({
-      title: '余额变动记录',
-      content: '显示余额的历史变动(开发中）',
-      showCancel: false
+    wx.navigateTo({
+      url: '/pages/balance-history/index'
     });
   },
 

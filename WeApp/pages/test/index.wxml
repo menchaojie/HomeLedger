@@ -1,11 +1,96 @@
-<!--pages/index/index.wxml-->
-<text>真实的</text>
-<view>好样的</view>
-<view>好样的</view>
-<view>好样的</view>
-<view>好样的</view>
-<view>好样的</view>
-<view>好样的</view>
-<view>好样的</view>
-<van-button type="primary">ok</van-button>
-<van-notice-bar left-icon="volume-o" text="在代码阅读过程中人们说脏话的频率是衡量代码质量的唯一标准。" />
+<!--pages/test/index.wxml-->
+<view class="container">
+  <view class="section">
+    <text class="section-title">日期选择测试页面</text>
+  </view>
+
+  <!-- 方式1: 单个日期选择器 -->
+  <view class="section">
+    <text class="method-title">方式1: 单个日期选择器</text>
+    <van-cell title="选择单个日期" value="{{ singleDate }}" bind:tap="onDisplaySingle" />
+    <van-calendar show="{{ showSinglePicker }}" bind:close="onCloseSingle" bind:confirm="onConfirmSingle" />
+  </view>
+
+  <!-- 方式2: 日期范围选择器 -->
+  <view class="section">
+    <text class="method-title">方式2: 日期范围选择器</text>
+    <van-cell title="选择日期范围" value="{{ startDate }} - {{ endDate }}" bind:tap="onDisplayRange" />
+    <van-calendar 
+      show="{{ showRangePicker }}" 
+      type="range" 
+      bind:close="onCloseRange" 
+      bind:confirm="onConfirmRange" 
+    />
+  </view>
+
+  <!-- 方式3: 自定义日期输入 -->
+  <view class="section">
+    <text class="method-title">方式3: 自定义日期输入</text>
+    <view class="custom-input-group">
+      <view class="input-item">
+        <text class="input-label">开始日期:</text>
+        <input 
+          class="date-input" 
+          type="text" 
+          placeholder="YYYY-MM-DD" 
+          value="{{ customStartDate }}" 
+          bindinput="onCustomStartChange"
+        />
+      </view>
+      <view class="input-item">
+        <text class="input-label">结束日期:</text>
+        <input 
+          class="date-input" 
+          type="text" 
+          placeholder="YYYY-MM-DD" 
+          value="{{ customEndDate }}" 
+          bindinput="onCustomEndChange"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 方式4: 快速选择 -->
+  <view class="section">
+    <text class="method-title">方式4: 快速选择</text>
+    <view class="quick-buttons">
+      <button 
+        class="quick-btn {{quickSelection === 'today' ? 'active' : ''}}" 
+        data-type="today" 
+        bindtap="onQuickSelection"
+      >今天</button>
+      <button 
+        class="quick-btn {{quickSelection === 'yesterday' ? 'active' : ''}}" 
+        data-type="yesterday" 
+        bindtap="onQuickSelection"
+      >昨天</button>
+      <button 
+        class="quick-btn {{quickSelection === 'thisWeek' ? 'active' : ''}}" 
+        data-type="thisWeek" 
+        bindtap="onQuickSelection"
+      >本周</button>
+      <button 
+        class="quick-btn {{quickSelection === 'thisMonth' ? 'active' : ''}}" 
+        data-type="thisMonth" 
+        bindtap="onQuickSelection"
+      >本月</button>
+    </view>
+  </view>
+
+  <!-- 方式5: 日历选择器 -->
+  <view class="section">
+    <text class="method-title">方式5: 日历选择器</text>
+    <van-cell title="日历选择" value="{{ calendarDate }}" bind:tap="onDisplayCalendar" />
+    <van-calendar 
+      show="{{ showCalendar }}" 
+      bind:close="onCloseCalendar" 
+      bind:confirm="onConfirmCalendar" 
+    />
+  </view>
+
+  <!-- 结果显示 -->
+  <view class="result-section">
+    <text class="result-title">当前选择:</text>
+    <text class="result-text">{{ selectionResult }}</text>
+  </view>
+</view>

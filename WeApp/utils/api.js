@@ -204,8 +204,19 @@ const familyAPI = {
 // 交易相关 API
 const transactionAPI = {
   // 获取交易记录
-  async getTransactions() {
-    return request('/transactions');
+  async getTransactions(params = {}) {
+    // 构建查询参数
+    const queryParts = [];
+    if (params.family_id) queryParts.push(`family_id=${params.family_id}`);
+    if (params.start_date) queryParts.push(`start_date=${params.start_date}`);
+    if (params.end_date) queryParts.push(`end_date=${params.end_date}`);
+    if (params.skip) queryParts.push(`skip=${params.skip}`);
+    if (params.limit) queryParts.push(`limit=${params.limit}`);
+    
+    const queryString = queryParts.join('&');
+    const url = `/transactions${queryString ? `?${queryString}` : ''}`;
+    
+    return request(url);
   },
 
   // 创建交易记录

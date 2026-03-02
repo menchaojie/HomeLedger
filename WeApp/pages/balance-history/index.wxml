@@ -1,0 +1,70 @@
+<view class="container">
+  <view class="header">
+    <view class="header-title">余额变动记录</view>
+  </view>
+
+  <!-- 日期筛选 -->
+  <view class="filter-container">
+    <view class="date-row">
+      <view class="date-section" bindtap="openStartDatePicker">
+        <text class="date-label">开始：</text>
+        <text class="date-value">{{startDate}}</text>
+      </view>
+      <view class="date-separator">至</view>
+      <view class="date-section" bindtap="openEndDatePicker">
+        <text class="date-label">结束：</text>
+        <text class="date-value">{{endDate}}</text>
+      </view>
+    </view>
+    <!-- 开始日期选择器 -->
+    <van-calendar 
+      show="{{ showStartDatePicker }}" 
+      bind:close="closeStartDatePicker" 
+      bind:confirm="onConfirmStartDate" 
+      min-date="{{minDate}}"
+      max-date="{{maxDate}}"
+    />
+    
+    <!-- 结束日期选择器 -->
+    <van-calendar 
+      show="{{ showEndDatePicker }}" 
+      bind:close="closeEndDatePicker" 
+      bind:confirm="onConfirmEndDate" 
+      min-date="{{minDate}}"
+      max-date="{{maxDate}}"
+    />
+    <view class="filter-section">
+      <view class="filter-buttons">
+        <button bindtap="applyDateFilter" class="filter-btn primary">应用筛选</button>
+        <button bindtap="resetDateFilter" class="filter-btn reset">重置</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 交易记录列表 -->
+  <view class="transaction-list">
+    <van-loading wx:if="{{loading}}" type="spinner" color="#4CAF50" />
+    <view wx:else class="transaction-list-content">
+      <view wx:if="{{transactions.length === 0}}" class="empty-state">
+        <van-icon name="info-o" size="64" color="#999" />
+        <text class="empty-text">暂无交易记录</text>
+      </view>
+      <view wx:else>
+        <view wx:for="{{transactions}}" wx:key="id" class="transaction-item">
+          <view class="transaction-header">
+            <text class="transaction-description">{{item.description}}</text>
+            <text class="transaction-amount" style="color: {{item.event_type === 'quota' || item.event_type === 'quota_allocation' ? '#4CAF50' : '#ff4d4f'}}">
+              {{item.event_type === 'quota' || item.event_type === 'quota_allocation' ? '+' : '-'}}{{item.amount}} 元
+            </text>
+          </view>
+          <view class="transaction-footer">
+            <text class="transaction-status">{{item.status}}</text>
+            <text class="transaction-date">{{item.formatted_time || '无时间'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+
+</view>

@@ -16,8 +16,7 @@
         <view class="message-content">
           <text class="message-title">{{item.title}}</text>
           <text class="message-body">{{item.content}}</text>
-          <text class="message-time">{{item.time}}</text>
-          <text class="message-time">{{item.read}}</text>
+          <text class="message-time">{{item.formatted_time || item.time}}</text>
         </view>
         <view class="message-status" wx:if="{{item.read === false}}">
           <view class="unread-dot"></view>

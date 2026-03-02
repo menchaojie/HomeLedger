@@ -33,6 +33,8 @@ def update_balance_snapshot(db: Session, member_id: UUID, amount: float):
 @router.get("", response_model=List[TransactionEventSchema])
 def get_transactions(
     family_id: UUID = None,
+    start_date: str = None,
+    end_date: str = None,
     skip: int = 0,
     limit: int = 100,
     current_user: User = Depends(get_current_active_user),
@@ -62,6 +64,15 @@ def get_transactions(
                 TransactionEvent.to_member_id.in_(member_ids)
             )
         )
+    
+    # 添加时间段筛选
+    if start_date:
+        query = query.filter(TransactionEvent.created_at >= start_date)
+    if end_date:
+        query = query.filter(TransactionEvent.created_at <= end_date)
+    
+    # 按创建时间降序排序
+    query = query.order_by(TransactionEvent.created_at.desc())
     
     transactions = query.offset(skip).limit(limit).all()
     return transactions

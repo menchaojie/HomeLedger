@@ -41,9 +41,11 @@ Page({
         title: msg.title,
         content: msg.content,
         time: msg.created_at,
+        formatted_time: this.formatTime(msg.created_at),
         read: msg.read
       }));
       
+      console.log('格式化后的消息:', formattedMessages);
       this.setData({ messages: formattedMessages });
     } catch (error) {
       console.error('加载消息失败:', error);
@@ -95,6 +97,34 @@ Page({
         title: '标记已读失败',
         icon: 'none'
       });
+    }
+  },
+
+  // 格式化时间显示（精确到秒）
+  formatTime(timeString) {
+    if (!timeString) return '';
+    
+    try {
+      // 简单处理：直接替换 T 为空格，去掉毫秒部分
+      let result = timeString;
+      
+      // 替换 T 为空格
+      result = result.replace('T', ' ');
+      
+      // 去掉毫秒部分（如果有）
+      if (result.includes('.')) {
+        result = result.split('.')[0];
+      }
+      
+      // 去掉时区部分（如果有）
+      if (result.includes('+')) {
+        result = result.split('+')[0];
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('时间格式化错误:', error, '原始字符串:', timeString);
+      return timeString; // 如果格式化失败，返回原字符串
     }
   }
 });
