@@ -1,0 +1,47 @@
+<view class="container">
+  <!-- 简化的头部 -->
+  <view class="header">
+    <text class="header-title">支出记账</text>
+  </view>
+
+  <view class="form-section">
+    <!-- 金额输入 -->
+    <view class="form-item">
+      <text class="form-label">支出金额</text>
+      <input 
+        class="input" 
+        value="{{amount}}" 
+        placeholder="请输入金额" 
+        type="number" 
+        bindinput="onAmountInput"
+      />
+    </view>
+
+    <!-- 描述输入 -->
+    <view class="form-item">
+      <text class="form-label">支出描述</text>
+      <input 
+        class="input" 
+        value="{{description}}" 
+        placeholder="请输入支出描述" 
+        bindinput="onDescriptionInput"
+      />
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="form-button">
+      <button 
+        class="submit-button" 
+        bindtap="submitExpense" 
+        disabled="{{submitting}}"
+      >
+        {{submitting ? '提交中...' : '提交支出'}}
+      </button>
+    </view>
+
+    <!-- 返回按钮 -->
+    <view class="back-button">
+      <button class="back-btn" bindtap="onBack">返回</button>
+    </view>
+  </view>
+</view>

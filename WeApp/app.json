@@ -10,7 +10,8 @@
     "pages/change-password/index",
     "pages/edit-profile/index",
     "pages/message/index",
-    "pages/balance-history/index"
+    "pages/balance-history/index",
+    "pages/expense-record/index"
   ],
   "window": {
     "navigationBarTextStyle": "white",

@@ -163,6 +163,13 @@ Page({
     });
   },
 
+  // 支出记账
+  onExpenseRecord() {
+    wx.navigateTo({
+      url: '/pages/expense-record/index'
+    });
+  },
+
   // 提交奖励申请
   onSubmitReward() {
     wx.showModal({

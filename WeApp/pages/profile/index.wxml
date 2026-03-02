@@ -42,6 +42,7 @@
       <view class="balance-content">
         <text class="balance-amount">可自由支配余额: {{user.balance}} 元</text>
         <van-button bindtap="onBalanceHistory" plain type="primary" block>余额变动记录</van-button>
+        <van-button bindtap="onExpenseRecord" type="primary" block>支出记账</van-button>
       </view>
     </view>
 

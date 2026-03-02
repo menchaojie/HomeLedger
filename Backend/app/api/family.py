@@ -252,7 +252,8 @@ def get_family_members(
             "user_name": user.user_name,
             "nickname": user.nickname,
             "avatar": avatar,  # 添加与UserSchema相同格式的avatar字段
-            "balance": balance  # 从余额快照表获取实际余额
+            "balance": balance,  # 从余额快照表获取实际余额
+            "is_current_user": family_member.user_id == current_user.id  # 添加是否是当前用户
         }
         member_list.append(member_data)
     

@@ -112,7 +112,7 @@ Page({
   onPostBounty() {
     wx.showModal({
       title: '发布悬赏任务',
-      content: '请填写任务名称和奖励金额',
+      content: '请填写任务名称和奖励金额(开发中)',
       showCancel: true,
       confirmText: '发布',
       success: async (res) => {

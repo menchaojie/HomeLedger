@@ -113,6 +113,13 @@ def create_transaction(
                 detail="Insufficient balance"
             )
     
+    # 对于支出类型的交易，确保有付款方
+    if transaction_data.event_type == 'expense' and not transaction_data.from_member_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Expense transaction requires a from_member_id"
+        )
+    
     # 检查收款方
     if transaction_data.to_member_id:
         to_member = db.query(FamilyMember).filter(FamilyMember.id == transaction_data.to_member_id).first()
