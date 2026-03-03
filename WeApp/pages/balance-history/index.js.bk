@@ -5,7 +5,11 @@ Page({
     transactions: [],
     loading: true,
     startDate: '',
-    endDate: ''
+    endDate: '',
+    showCalendar: false,
+    currentPicker: '', // 'start' | 'end'
+    minDate: new Date(2025, 0, 1).getTime(),
+    maxDate: new Date(2030, 11, 31).getTime()
   },
 
   onLoad() {
@@ -81,16 +85,51 @@ Page({
     }
   },
 
-  onStartDateChange(e) {
+  openStartDatePicker() {
     this.setData({
-      startDate: e.detail.value
+      currentPicker: 'start',
+      showCalendar: true
     });
   },
 
-  onEndDateChange(e) {
+  openEndDatePicker() {
     this.setData({
-      endDate: e.detail.value
+      currentPicker: 'end',
+      showCalendar: true
     });
+  },
+
+  closeCalendar() {
+    this.setData({
+      showCalendar: false
+    });
+  },
+
+  onConfirmDate(event) {
+    const date = this.formatDate(event.detail);
+
+    if (this.data.currentPicker === 'start') {
+      this.setData({
+        startDate: date,
+        showCalendar: false
+      });
+    } else {
+      this.setData({
+        endDate: date,
+        showCalendar: false
+      });
+    }
+  },
+
+  formatDate(timestamp) {
+    const date = new Date(timestamp);
+    if (isNaN(date.getTime())) return '';
+
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   },
 
   applyDateFilter() {

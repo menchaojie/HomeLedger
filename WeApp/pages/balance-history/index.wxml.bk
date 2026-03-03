@@ -6,38 +6,26 @@
   <!-- 日期筛选 -->
   <view class="filter-container">
     <view class="date-row">
-      
-      <!-- 开始日期 -->
-      <picker 
-        mode="date" 
-        value="{{startDate}}" 
-        start="2020-01-01" 
-        end="2030-12-31"
-        bindchange="onStartDateChange"
-      >
-        <view class="date-section">
-          <text class="date-label">开始：</text>
-          <text class="date-value">{{startDate}}</text>
-        </view>
-      </picker>
-
+      <view class="date-section" bindtap="openStartDatePicker">
+        <text class="date-label">开始：</text>
+        <text class="date-value">{{startDate}}</text>
+      </view>
       <view class="date-separator">至</view>
-
-      <!-- 结束日期 -->
-      <picker 
-        mode="date" 
-        value="{{endDate}}" 
-        start="2020-01-01" 
-        end="2030-12-31"
-        bindchange="onEndDateChange"
-      >
-        <view class="date-section">
-          <text class="date-label">结束：</text>
-          <text class="date-value">{{endDate}}</text>
-        </view>
-      </picker>
-
+      <view class="date-section" bindtap="openEndDatePicker">
+        <text class="date-label">结束：</text>
+        <text class="date-value">{{endDate}}</text>
+      </view>
     </view>
+
+    <!-- 单一日历组件（懒加载） -->
+    <van-calendar 
+      wx:if="{{ showCalendar }}"
+      show="{{ showCalendar }}"
+      bind:close="closeCalendar"
+      bind:confirm="onConfirmDate"
+      min-date="{{minDate}}"
+      max-date="{{maxDate}}"
+    />
 
     <view class="filter-section">
       <view class="filter-buttons">
@@ -51,7 +39,6 @@
   <view class="transaction-list">
     <van-loading wx:if="{{loading}}" type="spinner" color="#4CAF50" />
     <view wx:else class="transaction-list-content">
-
       <view wx:if="{{transactions.length === 0}}" class="empty-state">
         <van-icon name="info-o" size="64" color="#999" />
         <text class="empty-text">暂无交易记录</text>
@@ -74,7 +61,6 @@
           </view>
         </view>
       </view>
-
     </view>
   </view>
 </view>
