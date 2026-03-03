@@ -13,7 +13,9 @@
     "pages/message/index",
     "pages/balance-history/index",
     "pages/expense-record/index",
-    "pages/member-reward/index"
+    "pages/member-reward/index",
+    "pages/member-management/index"
+
 
   ],
   "window": {

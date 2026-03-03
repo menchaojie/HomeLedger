@@ -1,0 +1,54 @@
+<view class="container">
+  <view class="header">
+    <text class="header-title">成员管理</text>
+  </view>
+
+  <view class="form-section">
+    <!-- 成员选择 -->
+    <view class="form-item">
+      <text class="form-label">选择成员</text>
+      <view class="member-selector">
+        <picker range="{{members}}" range-key="displayName" value="{{selectedMemberIndex}}" bindchange="onMemberChange">
+          <view class="picker-view">
+            {{selectedMember ? selectedMember.displayName : '请选择成员'}}
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 角色设置 -->
+    <view class="form-item" wx:if="{{selectedMember}}">
+      <text class="form-label">当前角色</text>
+      <view class="role-display">
+        {{selectedMember.role === 'admin' ? '管理员' : '普通成员'}}
+      </view>
+    </view>
+
+    <view class="form-item" wx:if="{{selectedMember}}">
+      <text class="form-label">修改角色</text>
+      <view class="role-picker">
+        <picker range="{{roleOptions}}" value="{{selectedRoleIndex}}" bindchange="onRoleChange">
+          <view class="picker-view">
+            {{roleOptions[selectedRoleIndex]}}
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="form-button">
+      <button 
+        class="submit-button" 
+        bindtap="updateMemberRole" 
+        disabled="{{!selectedMember || submitting}}"
+      >
+        {{submitting ? '提交中...' : '更新角色'}}
+      </button>
+    </view>
+
+    <!-- 返回按钮 -->
+    <view class="back-button">
+      <button class="back-btn" bindtap="onBack">返回</button>
+    </view>
+  </view>
+</view>

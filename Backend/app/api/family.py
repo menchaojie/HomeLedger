@@ -339,13 +339,16 @@ def update_family_member(
     
     # 更新成员信息
     if member_data.role is not None:
+        print(f"Updating member {member.id} role from {member.role} to {member_data.role}")
         member.role = member_data.role
     if member_data.monthly_quota is not None:
+        print(f"Updating member {member.id} monthly_quota to {member_data.monthly_quota}")
         member.monthly_quota = member_data.monthly_quota
     
     db.commit()
     db.refresh(member)
     
+    print(f"Updated member {member.id} role: {member.role}")
     return member
 
 

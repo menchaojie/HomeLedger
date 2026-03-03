@@ -268,6 +268,15 @@ Page({
     }
   },
 
+  // 成员管理
+  onMemberManagement() {
+    if (this.data.currentUser && this.data.currentUser.familyRole === 'admin') {
+      wx.navigateTo({
+        url: '/pages/member-management/index'
+      });
+    }
+  },
+
   // 奖励审批
   onRewardApproval() {
     if (this.data.currentUser && this.data.currentUser.familyRole === 'admin') {
