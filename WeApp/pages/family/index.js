@@ -259,6 +259,15 @@ Page({
     }
   },
 
+  // 成员奖励
+  onMemberReward() {
+    if (this.data.currentUser && this.data.currentUser.familyRole === 'admin') {
+      wx.navigateTo({
+        url: '/pages/member-reward/index'
+      });
+    }
+  },
+
   // 奖励审批
   onRewardApproval() {
     if (this.data.currentUser && this.data.currentUser.familyRole === 'admin') {

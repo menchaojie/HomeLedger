@@ -9,10 +9,12 @@
     <view class="message-list">
       <view wx:for="{{messages}}" wx:key="id" class="message-item" bindtap="markAsRead" data-id="{{item.id}}">
         <view class="message-icon">
-          <view class="icon-circle">
-            <text class="icon">{{item.type === 'quota' ? '配额' : '系统'}}</text>
+            <view class="icon-circle">
+              <text class="icon">
+                {{item.type === 'quota' ? '配额' : (item.type === 'reward' ? '奖励' : '系统')}}
+              </text>
+            </view>
           </view>
-        </view>
         <view class="message-content">
           <text class="message-title">{{item.title}}</text>
           <text class="message-body">{{item.content}}</text>

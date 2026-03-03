@@ -63,9 +63,9 @@
             <text class="transaction-description">{{item.description}}</text>
             <text 
               class="transaction-amount" 
-              style="color: {{item.event_type === 'quota' || item.event_type === 'quota_allocation' ? '#4CAF50' : '#ff4d4f'}}"
+              style="color: {{item.event_type === 'quota' || item.event_type === 'quota_allocation' || item.event_type === 'reward' ? '#4CAF50' : '#ff4d4f'}}"
             >
-              {{item.event_type === 'quota' || item.event_type === 'quota_allocation' ? '+' : '-'}}{{item.amount}} 元
+              {{item.event_type === 'quota' || item.event_type === 'quota_allocation' || item.event_type === 'reward' ? '+' : '-'}}{{item.amount}} 元
             </text>
           </view>
           <view class="transaction-footer">

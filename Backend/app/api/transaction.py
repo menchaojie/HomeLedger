@@ -8,6 +8,7 @@ from app.core.database import get_db
 from app.models.user import User
 from app.models.family import FamilyMember
 from app.models.transaction import TransactionEvent, MemberBalanceSnapshot
+from app.models.message import Message
 from app.schemas.transaction import TransactionEvent as TransactionEventSchema, TransactionEventCreate
 from app.core.dependencies import get_current_active_user
 
@@ -147,6 +148,20 @@ def create_transaction(
         update_balance_snapshot(db, transaction_data.from_member_id, -transaction_data.amount)
     if transaction_data.to_member_id:
         update_balance_snapshot(db, transaction_data.to_member_id, transaction_data.amount)
+    
+    # 为奖励类型的交易创建消息通知
+    if transaction_data.event_type == 'reward' and transaction_data.to_member_id:
+        # 获取受奖励成员的用户ID
+        to_member = db.query(FamilyMember).filter(FamilyMember.id == transaction_data.to_member_id).first()
+        if to_member:
+            # 创建消息通知
+            message = Message(
+                user_id=to_member.user_id,
+                title="奖励通知",
+                content=f"您获得了{transaction_data.amount}元的奖励：{transaction_data.description}",
+                type="reward"
+            )
+            db.add(message)
     
     db.commit()
     db.refresh(transaction)

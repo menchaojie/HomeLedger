@@ -1,0 +1,58 @@
+<view class="container">
+  <view class="header">
+    <text class="header-title">成员奖励</text>
+  </view>
+
+  <view class="form-section">
+    <!-- 成员选择 -->
+    <view class="form-item">
+      <text class="form-label">选择成员</text>
+      <view class="member-selector">
+        <picker range="{{members}}" range-key="displayName" value="{{selectedMemberIndex}}" bindchange="onMemberChange">
+          <view class="picker-view">
+            {{selectedMember ? selectedMember.displayName : '请选择成员'}}
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 金额输入 -->
+    <view class="form-item">
+      <text class="form-label">奖励金额</text>
+      <input 
+        class="input" 
+        value="{{amount}}" 
+        placeholder="请输入奖励金额" 
+        type="number" 
+        bindinput="onAmountInput"
+      />
+    </view>
+
+    <!-- 描述输入 -->
+    <view class="form-item">
+      <text class="form-label">奖励描述</text>
+      <input 
+        class="input" 
+        value="{{description}}" 
+        placeholder="请输入奖励描述" 
+        bindinput="onDescriptionInput"
+      />
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="form-button">
+      <button 
+        class="submit-button" 
+        bindtap="submitReward" 
+        disabled="{{submitting}}"
+      >
+        {{submitting ? '提交中...' : '提交奖励'}}
+      </button>
+    </view>
+
+    <!-- 返回按钮 -->
+    <view class="back-button">
+      <button class="back-btn" bindtap="onBack">返回</button>
+    </view>
+  </view>
+</view>

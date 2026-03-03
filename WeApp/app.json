@@ -12,7 +12,9 @@
     "pages/edit-profile/index",
     "pages/message/index",
     "pages/balance-history/index",
-    "pages/expense-record/index"
+    "pages/expense-record/index",
+    "pages/member-reward/index"
+
   ],
   "window": {
     "navigationBarTextStyle": "white",
