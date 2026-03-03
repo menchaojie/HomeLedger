@@ -6,7 +6,6 @@ Page({
     user: null,
     currentUser: null,
     loading: true,
-    isLoggedIn: false,  // 登录状态
     unreadMessageCount: 0, // 未读消息数
     groupStates: {
       personal: true,    // 个人信息分组默认展开
@@ -17,10 +16,24 @@ Page({
   },
 
   onLoad() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
     this.loadUserData();
   },
 
   onShow() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
     // 页面显示时重新检查登录状态
     this.loadUserData();
   },
@@ -28,13 +41,9 @@ Page({
   // 加载未读消息数
   async loadUnreadMessageCount() {
     try {
-      if (isLoggedIn()) {
-        const messages = await messageAPI.getMessages();
-        const unreadCount = messages.filter(msg => !msg.read).length;
-        this.setData({ unreadMessageCount: unreadCount });
-      } else {
-        this.setData({ unreadMessageCount: 0 });
-      }
+      const messages = await messageAPI.getMessages();
+      const unreadCount = messages.filter(msg => !msg.read).length;
+      this.setData({ unreadMessageCount: unreadCount });
     } catch (error) {
       console.error('加载未读消息数失败:', error);
       this.setData({ unreadMessageCount: 0 });
@@ -45,26 +54,15 @@ Page({
   async loadUserData() {
     this.setData({ loading: true });
     try {
-      const loggedIn = isLoggedIn();
-      this.setData({ isLoggedIn: loggedIn });
+      // 获取当前用户信息
+      const userInfo = await authAPI.getCurrentUser();
+      // 处理用户数据
+      const processedUser = this.processUserData(userInfo);
       
-      if (loggedIn) {
-        // 获取当前用户信息
-        const userInfo = await authAPI.getCurrentUser();
-        // 处理用户数据
-        const processedUser = this.processUserData(userInfo);
-        
-        this.setData({
-          user: processedUser,
-          currentUser: processedUser
-        });
-      } else {
-        // 未登录状态
-        this.setData({
-          user: null,
-          currentUser: null
-        });
-      }
+      this.setData({
+        user: processedUser,
+        currentUser: processedUser
+      });
     } catch (error) {
       console.error('加载用户数据失败:', error);
       // API调用失败时使用模拟数据
@@ -323,15 +321,18 @@ Page({
             icon: 'success'
           });
           
-          // 通知全局应用更新tabBar状态
+          // 通知全局应用更新登录状态
           const app = getApp();
           if (app && app.onLoginStatusChange) {
             app.onLoginStatusChange();
           }
           
-          // 更新登录状态并重新加载数据
-          this.setData({ isLoggedIn: false });
-          this.loadUserData();
+          // 跳转到欢迎页面
+          setTimeout(() => {
+            wx.redirectTo({
+              url: '/pages/welcome/index'
+            });
+          }, 1500);
         }
       }
     });

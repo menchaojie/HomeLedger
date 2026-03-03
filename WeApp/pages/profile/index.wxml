@@ -1,24 +1,6 @@
 <view class="container">
-  <!-- 未登录状态 -->
-  <view wx:if="{{!isLoggedIn}}" class="login-prompt">
-    <view class="login-header">
-      <image class="login-icon" src="/assets/login-icon.png" mode="aspectFit"></image>
-      <view class="login-title">欢迎使用 HomeLedger</view>
-      <view class="login-subtitle">请先登录以使用完整功能</view>
-    </view>
-
-    <view class="login-options">
-      <van-button bindtap="onWechatLogin" plain hairline type="primary" size="large" block>登录账户</van-button>
-      <van-button bindtap="onRegister" plain hairline type="primary" size="large" block>注册新账户</van-button>
-    </view>
-    <van-notice-bar left-icon="volume-o" 
-    text="一人自律，养成好习惯；一家自律，形成好家风；一国自律，塑造好文化。" 
-    />
-
-  </view>
-
   <!-- 已登录状态 -->
-  <view wx:else class="user-content">
+  <view class="user-content">
     <!-- 个人信息区 -->
     <view class="personal-info">
       <view class="section-title">个人信息</view>

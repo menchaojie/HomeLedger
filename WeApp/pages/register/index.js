@@ -149,17 +149,17 @@ Page({
       
       // 跳转到个人页面（登录后的状态）
       setTimeout(() => {
-        // 通知全局应用更新tabBar状态
+        // 通知全局应用更新登录状态
         const app = getApp();
         if (app && app.onLoginStatusChange) {
           app.onLoginStatusChange();
         }
         
-        // 使用switchTab确保tabBar显示
+        // 使用switchTab跳转到个人页面
         wx.switchTab({
           url: '/pages/profile/index',
           success: () => {
-            // tabBar显示后，刷新页面数据
+            // 页面跳转成功后，刷新页面数据
             setTimeout(() => {
               const pages = getCurrentPages();
               const profilePage = pages.find(page => page.route === 'pages/profile/index');

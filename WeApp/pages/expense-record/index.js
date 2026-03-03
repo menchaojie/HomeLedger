@@ -13,9 +13,26 @@ Page({
   },
 
   onLoad() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
     console.log('Expense record page loaded');
     // 恢复加载家庭的逻辑
     this.loadFamilies();
+  },
+
+  onShow() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
   },
 
   // 加载用户的家庭列表

@@ -1,5 +1,5 @@
 // 交易页面逻辑
-const { serviceAPI, taskAPI, transactionAPI, authAPI } = require('../../utils/api.js');
+const { serviceAPI, taskAPI, transactionAPI, authAPI, isLoggedIn } = require('../../utils/api.js');
 
 Page({
   data: {
@@ -11,6 +11,24 @@ Page({
   },
 
   onLoad() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
+    this.loadTransactionData();
+  },
+
+  onShow() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
     this.loadTransactionData();
   },
 

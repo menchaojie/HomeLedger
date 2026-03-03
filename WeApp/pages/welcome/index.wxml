@@ -1,0 +1,33 @@
+<view class="container">
+  <view class="welcome-header">
+    <image class="logo" src="/assets/logo.png" mode="aspectFit"></image>
+    <view class="app-name">HomeLedger</view>
+    <view class="app-slogan">家庭账本，智能管理</view>
+  </view>
+  
+  <view class="welcome-content">
+    <view class="feature-list">
+      <view class="feature-item">
+        <van-icon name="user-o" class="feature-icon" />
+        <text class="feature-text">个人管理</text>
+      </view>
+      <view class="feature-item">
+        <van-icon name="home-o" class="feature-icon" />
+        <text class="feature-text">家庭共享</text>
+      </view>
+      <view class="feature-item">
+        <van-icon name="exchange" class="feature-icon" />
+        <text class="feature-text">内部交易</text>
+      </view>
+    </view>
+    
+    <view class="action-buttons">
+      <van-button bindtap="onLogin" type="primary" size="large" block>登录账户</van-button>
+      <van-button bindtap="onRegister" plain type="primary" size="large" block>注册新账户</van-button>
+    </view>
+    
+    <van-notice-bar left-icon="volume-o" 
+      text="一人自律，养成好习惯；一家自律，形成好家风；一国自律，塑造好文化。" 
+    />
+  </view>
+</view>

@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-notice-bar": "@vant/weapp/notice-bar/index"
+  },
+  "navigationBarTitleText": "欢迎使用 HomeLedger",
+  "navigationBarBackgroundColor": "#4CAF50",
+  "navigationBarTextStyle": "white"
+}

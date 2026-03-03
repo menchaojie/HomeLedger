@@ -9,7 +9,25 @@ Page({
   },
 
   onLoad() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
     this.setDefaultDateRange();
+    this.loadTransactions();
+  },
+
+  onShow() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
     this.loadTransactions();
   },
 

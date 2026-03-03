@@ -7,8 +7,7 @@ Page({
     family: null,
     members: [],
     currentUser: null,
-    loading: true,
-    isLoggedIn: false  // 登录状态
+    loading: true
   },
 
   showPopup() {
@@ -20,11 +19,25 @@ Page({
   },
 
   onLoad() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
     console.log('家庭页面加载，当前 token:', getToken());
     this.loadFamilyData();
   },
 
   onShow() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
     // 页面显示时重新检查登录状态
     console.log('家庭页面显示，当前 token:', getToken());
     this.loadFamilyData();
@@ -34,18 +47,6 @@ Page({
   async loadFamilyData() {
     this.setData({ loading: true });
     try {
-      const loggedIn = isLoggedIn();
-      this.setData({ isLoggedIn: loggedIn });
-      
-      if (!loggedIn) {
-        // 未登录状态，不加载数据
-        this.setData({ 
-          family: null, 
-          members: [], 
-          currentUser: null 
-        });
-        return;
-      }
       
       // 获取当前用户信息
       const userInfo = await authAPI.getCurrentUser();

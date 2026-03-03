@@ -1,11 +1,31 @@
 // 修改密码页面逻辑
-const { authAPI } = require('../../utils/api.js');
+const { authAPI, isLoggedIn } = require('../../utils/api.js');
 
 Page({
   data: {
     oldPassword: '',
     newPassword: '',
     confirmPassword: ''
+  },
+
+  onLoad() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
+  },
+
+  onShow() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
   },
 
   // 返回上一页

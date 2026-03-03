@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/welcome/index",
     "pages/profile/index",
     "pages/family/index",
     "pages/transaction/index",

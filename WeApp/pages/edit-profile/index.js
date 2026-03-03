@@ -1,5 +1,5 @@
 // 编辑资料页面逻辑
-const { authAPI, API_HOST } = require('../../utils/api.js');
+const { authAPI, API_HOST, isLoggedIn } = require('../../utils/api.js');
 
 Page({
   data: {
@@ -15,6 +15,14 @@ Page({
   },
 
   onLoad() {
+    // 检查登录状态，如果未登录跳转到欢迎页面
+    if (!isLoggedIn()) {
+      wx.redirectTo({
+        url: '/pages/welcome/index'
+      });
+      return;
+    }
+    
     // 获取传递的用户数据
     const eventChannel = this.getOpenerEventChannel();
     if (eventChannel) {
