@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     # 服务器配置
     server_host: str = "127.0.0.1"
     server_port: int = 8000
+    # server_domain: str = "http://127.0.0.1:8000"
+    # server_domain: str = "https://menchaojie.top:2288"
     server_domain: str = "http://127.0.0.1:8000"
     
     # 数据库配置

@@ -1,10 +1,12 @@
 // API 工具类
 // 微信小程序开发阶段使用本地后端，生产环境使用真实域名
 // 开发环境使用完整URL，生产环境使用相对路径
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+// const API_BASE_URL = 'http://127.0.0.1:8000/api';
 // const API_BASE_URL = 'https://menchaojie.top:2288/api';
-const API_HOST = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
+// const API_HOST = 'http://127.0.0.1:8000';
 // const API_HOST = 'https://menchaojie.top:2288';
+const API_HOST = 'http://127.0.0.1:8000';
 
 // 存储 token
 let token = '';
