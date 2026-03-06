@@ -13,7 +13,7 @@
           <text class="user-info">角色: {{user.role || '未设置'}}</text>
           <text class="user-info">手机: {{user.phone || '未设置'}}</text>
           <text class="user-info">邮箱: {{user.email || '未设置'}}</text>
-          <van-button bindtap="onEditProfile" plain type="primary" size="small" style="margin-top: 10rpx;">编辑资料</van-button>
+          <button bindtap="onEditProfile" type="default"  >编辑资料</button>
         </view>
       </view>
     </view>
@@ -23,8 +23,10 @@
       <view class="section-title">个人余额</view>
       <view class="balance-content">
         <text class="balance-amount">可自由支配余额: {{user.balance}} 元</text>
-        <van-button bindtap="onBalanceHistory" plain type="primary" block>余额变动记录</van-button>
-        <van-button bindtap="onExpenseRecord" type="primary" block>支出记账</van-button>
+        <view class="balance-management">
+          <button bindtap="onExpenseRecord" type="default" inline >个人支出记账</button>
+          <button bindtap="onBalanceHistory"  type="default" inline>余额变动记录</button>
+        </view>
       </view>
     </view>
 
