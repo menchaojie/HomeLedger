@@ -51,13 +51,29 @@
     <view class="actions">
       <van-button wx:if="{{!family}}" bindtap="onCreateFamily" plain type="primary" block>创建家庭</van-button>
       <van-button wx:if="{{!family}}" bindtap="onJoinFamily" plain type="info" block>加入家庭</van-button>
-      <view wx:if="{{currentUser.familyRole === 'admin'}}" class="admin-actions">
-        <van-button bindtap="onQuotaManagement" plain type="primary" block>配额管理</van-button>
-        <van-button bindtap="onMemberReward" plain type="primary" block>成员奖励</van-button>
-        <van-button bindtap="onMemberManagement" plain type="primary" block>成员管理</van-button>
-        <van-button bindtap="onMemberApproval" plain type="primary" block>成员审批</van-button>
-        <van-button bindtap="onRewardApproval" plain type="primary" block>奖励审批</van-button>
+      
+      <!-- 下拉框 -->
+      <view wx:if="{{family }}" class="admin-dropdown">
+        <view class="dropdown-header" bindtap="toggleAdminDropdown">
+          <text class="dropdown-title">家庭设置</text>
+          <text class="dropdown-arrow {{adminDropdownOpen ? 'open' : ''}}">▼</text>
+        </view>
+        <view wx:if="{{adminDropdownOpen}}" class="dropdown-content">
+          <!-- 管理员显示按钮 -->
+          <view wx:if="{{currentUser.familyRole === 'admin'}}">
+            <van-button bindtap="onQuotaManagement" plain type="primary" block>配额管理</van-button>
+            <van-button bindtap="onMemberReward" plain type="primary" block>成员奖励</van-button>
+            <van-button bindtap="onMemberManagement" plain type="primary" block>成员管理</van-button>
+            <van-button bindtap="onMemberApproval" plain type="primary" block>成员审批</van-button>
+            <van-button bindtap="onRewardApproval" plain type="primary" block>奖励审批</van-button>
+          </view>
+          <!-- 非管理员显示提示 -->
+          <view wx:if="{{currentUser.familyRole !== 'admin'}}" class="non-admin-message">
+            <text class="message-text">你不是管理员，无设置权限</text>
+          </view>
+        </view>
       </view>
+      
     </view>
     <view wx:if="{{family}}" >
     <van-notice-bar scrollable  wrapable style="--notice-bar-font-size: 10px;" 

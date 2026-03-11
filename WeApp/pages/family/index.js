@@ -7,7 +7,8 @@ Page({
     family: null,
     members: [],
     currentUser: null,
-    loading: true
+    loading: true,
+    adminDropdownOpen: false
   },
 
   showPopup() {
@@ -336,5 +337,12 @@ Page({
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  },
+
+  // 切换管理员下拉框
+  toggleAdminDropdown() {
+    this.setData({
+      adminDropdownOpen: !this.data.adminDropdownOpen
+    });
   }
 });
